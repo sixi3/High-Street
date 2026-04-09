@@ -64,6 +64,19 @@ body{font-family:var(--body);background:var(--white);color:var(--black);overflow
 }
 .splash-title .bl{color:var(--blue);font-weight:700;font-variation-settings:'wght' 700}
 .splash-title .bk{color:var(--black);font-weight:700;font-variation-settings:'wght' 700}
+.splash-subtitle{
+  margin-top:14px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--g2);
+  text-align:center;
+  position:relative;
+  z-index:1;
+  opacity:0;
+  animation:sUp .8s .28s cubic-bezier(.23,1,.32,1) forwards;
+}
 .splash-btns{
   display:flex;gap:16px;margin-top:40px;position:relative;z-index:1;
   opacity:0;animation:sUp .8s .4s cubic-bezier(.23,1,.32,1) forwards;
@@ -400,6 +413,8 @@ body{font-family:var(--body);background:var(--white);color:var(--black);overflow
   <h1 class="splash-title">
     <span class="bk">HIG</span><span class="bl">H</span>&nbsp;<span class="bl">S</span><span class="bk">TREET</span>
   </h1>
+  <p class="splash-subtitle">Trade conviction. Own the culture.</p>
+  <p class="splash-subtitle">Click Sign Up to continue</p>
   <div class="splash-btns">
     <button class="splash-btn primary" onclick="enterApp()">Sign Up</button>
     <button class="splash-btn" onclick="enterApp()">Login</button>
