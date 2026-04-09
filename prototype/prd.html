@@ -527,6 +527,7 @@
     </h1>
     <p class="hero-sub">A CREDS-first fashion prediction platform where consumers compete on trend outcomes, build public reputation, and unlock access — powered by FI's intelligence stack.</p>
     <div class="hero-btns">
+      <a href="#overview" class="btn btn-ghost" id="view-prd-btn">View PRD</a>
       <a href="index.html" class="btn btn-solid">View Prototype</a>
       <a href="#roadmap" class="btn btn-ghost">View Roadmap →</a>
     </div>
@@ -967,6 +968,16 @@
     });
   },{rootMargin:'-40% 0px -55% 0px'});
   sections.forEach(s=>navObs.observe(s));
+
+  // Hero CTA explicit tap/scroll behavior for PRD section
+  const viewPrdBtn = document.getElementById('view-prd-btn');
+  const overviewSection = document.getElementById('overview');
+  if (viewPrdBtn && overviewSection) {
+    viewPrdBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      overviewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 </script>
 </body>
 </html>
