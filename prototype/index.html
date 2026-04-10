@@ -276,12 +276,82 @@ body{font-family:var(--body);background:var(--white);color:var(--black);overflow
 .modal-stat-n{font-family:var(--display);font-weight:700;font-size:22px}
 .modal-stat-l{font-family:var(--mono);font-size:9px;color:var(--g3);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
 
-/* Chart placeholder */
+/* Chart + FI intelligence panel */
+.chart-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.chart-legend{display:flex;gap:14px}
+.chart-legend-item{
+  font-family:var(--mono);font-size:9px;color:var(--g3);
+  letter-spacing:.1em;text-transform:uppercase;
+  display:flex;align-items:center;gap:6px;
+}
+.chart-dot{width:8px;height:2px;display:inline-block}
+.chart-dot.crowd{background:var(--blue)}
+.chart-dot.fi{background:var(--yellow);border-top:1px dashed var(--yellow);height:0;border-width:0 0 2px;border-style:dashed}
+.chart-tf{font-family:var(--mono);font-size:9px;color:var(--g3);letter-spacing:.08em;text-transform:uppercase}
 .modal-chart{
-  background:var(--g6);border-radius:6px;height:140px;margin-bottom:24px;
+  background:var(--g6);border-radius:6px;height:150px;margin-bottom:14px;
   position:relative;overflow:hidden;
 }
 .modal-chart svg{width:100%;height:100%}
+
+/* FI INTELLIGENCE PANEL */
+.fi-panel{
+  background:var(--black);color:white;border-radius:6px;
+  padding:18px 20px;margin-bottom:24px;position:relative;overflow:hidden;
+}
+.fi-panel::before{
+  content:'';position:absolute;top:0;left:0;width:3px;height:100%;
+  background:var(--yellow);
+}
+.fi-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fi-title{
+  font-family:var(--mono);font-size:10px;color:var(--yellow);
+  letter-spacing:.14em;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+.fi-title::before{
+  content:'';width:6px;height:6px;background:var(--yellow);border-radius:50%;
+  animation:blink 2s infinite;
+}
+.fi-link{
+  font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5);
+  letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+  transition:color .15s;
+}
+.fi-link:hover{color:var(--yellow)}
+.fi-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:14px}
+.fi-metric-v{
+  font-family:var(--display);font-weight:700;font-variation-settings:'wght' 700;
+  font-size:22px;line-height:1;margin-bottom:3px;color:white;
+}
+.fi-metric-v.up{color:var(--yellow)}
+.fi-metric-v.down{color:var(--red)}
+.fi-metric-l{
+  font-family:var(--mono);font-size:8px;color:rgba(255,255,255,.4);
+  letter-spacing:.1em;text-transform:uppercase;
+}
+.fi-signals{
+  display:flex;flex-wrap:wrap;gap:6px;padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.fi-sig{
+  font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.65);
+  padding:4px 10px;background:rgba(255,255,255,.06);border-radius:2px;
+  letter-spacing:.04em;
+}
+.fi-sig .n{color:var(--yellow);font-weight:700}
+.fi-divergence{
+  display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.fi-div-label{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase}
+.fi-div-val{font-family:var(--mono);font-size:11px;font-weight:700}
+.fi-div-val.high{color:var(--yellow)}
+.fi-div-val.low{color:rgba(255,255,255,.6)}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
 /* Trade panel */
 .trade-panel{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
@@ -640,11 +710,27 @@ function renderShop(){
 function openModal(id){
   const m=MARKETS.find(x=>x.id===id);if(!m)return;
   const no=100-m.yes;
-  // Generate a simple SVG chart
-  const pts=[];let v=m.yes-15;
-  for(let i=0;i<=20;i++){v+=Math.random()*6-2.8;v=Math.max(20,Math.min(90,v));pts.push([i*34,140-v*1.4]);}
-  const line=pts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ');
-  const area=line+` L${pts[pts.length-1][0]},140 L0,140 Z`;
+
+  // Generate dual-line chart: crowd probability + FI intelligence signal
+  const W=680, H=150, STEPS=24;
+  const crowdPts=[];let cv=m.yes-18;
+  for(let i=0;i<=STEPS;i++){cv+=Math.random()*6-2.8;cv=Math.max(18,Math.min(92,cv));crowdPts.push([i*(W/STEPS),H-cv*(H-20)/100-10]);}
+  // FI signal leads the crowd slightly — always slightly ahead/different
+  const fiPts=[];let fv=m.yes-10+(Math.random()*20-10);
+  for(let i=0;i<=STEPS;i++){fv+=Math.random()*5-2.3;fv=Math.max(15,Math.min(95,fv));fiPts.push([i*(W/STEPS),H-fv*(H-20)/100-10]);}
+  const crowdLine=crowdPts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ');
+  const crowdArea=crowdLine+` L${crowdPts[crowdPts.length-1][0]},${H} L0,${H} Z`;
+  const fiLine=fiPts.map((p,i)=>(i?'L':'M')+p[0]+','+p[1]).join(' ');
+
+  // FI intelligence data (mocked, would come from intel.thefi.company API)
+  const fiIndex = Math.round(m.yes + (Math.random()*18-9));
+  const fiDelta = (Math.random()*28-6).toFixed(1);
+  const fiVelocity = fiDelta > 0 ? '+'+fiDelta+'%' : fiDelta+'%';
+  const fiStage = fiIndex > 70 ? 'PEAK' : fiIndex > 50 ? 'GROWTH' : fiIndex > 30 ? 'EARLY' : 'DECLINE';
+  const divergence = Math.abs(fiIndex - m.yes);
+  const divLabel = divergence > 8 ? 'HIGH · EDGE DETECTED' : divergence > 4 ? 'MODERATE' : 'ALIGNED';
+  const divClass = divergence > 8 ? 'high' : 'low';
+  const trendSlug = m.q.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);
 
   document.getElementById('modal').innerHTML=`
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -658,12 +744,57 @@ function openModal(id){
         <div><div class="modal-stat-n">${m.traders.toLocaleString()}</div><div class="modal-stat-l">Traders</div></div>
         <div><div class="modal-stat-n">${m.end}</div><div class="modal-stat-l">Closes</div></div>
       </div>
+      <div class="chart-head">
+        <div class="chart-legend">
+          <span class="chart-legend-item"><span class="chart-dot crowd"></span>Crowd probability</span>
+          <span class="chart-legend-item"><span class="chart-dot fi"></span>FI intelligence signal</span>
+        </div>
+        <span class="chart-tf">90 DAYS</span>
+      </div>
       <div class="modal-chart">
-        <svg viewBox="0 0 680 140" preserveAspectRatio="none">
-          <path d="${area}" fill="rgba(31,78,245,.08)"/>
-          <path d="${line}" fill="none" stroke="#1F4EF5" stroke-width="2"/>
-          <circle cx="${pts[pts.length-1][0]}" cy="${pts[pts.length-1][1]}" r="4" fill="#1F4EF5"/>
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+          <path d="${crowdArea}" fill="rgba(31,78,245,.07)"/>
+          <path d="${fiLine}" fill="none" stroke="#FFD542" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <path d="${crowdLine}" fill="none" stroke="#1F4EF5" stroke-width="2"/>
+          <circle cx="${crowdPts[crowdPts.length-1][0]}" cy="${crowdPts[crowdPts.length-1][1]}" r="4" fill="#1F4EF5"/>
+          <circle cx="${fiPts[fiPts.length-1][0]}" cy="${fiPts[fiPts.length-1][1]}" r="3.5" fill="#FFD542"/>
         </svg>
+      </div>
+
+      <div class="fi-panel">
+        <div class="fi-head">
+          <div class="fi-title">FI Intelligence · Live</div>
+          <a class="fi-link" href="https://intel.thefi.company/trend?q=${trendSlug}" target="_blank">View full report ↗</a>
+        </div>
+        <div class="fi-metrics">
+          <div>
+            <div class="fi-metric-v">${fiIndex}</div>
+            <div class="fi-metric-l">Trend Index</div>
+          </div>
+          <div>
+            <div class="fi-metric-v ${fiDelta>=0?'up':'down'}">${fiVelocity}</div>
+            <div class="fi-metric-l">30d Velocity</div>
+          </div>
+          <div>
+            <div class="fi-metric-v">${fiStage}</div>
+            <div class="fi-metric-l">Lifecycle Stage</div>
+          </div>
+          <div>
+            <div class="fi-metric-v">${Math.round(60+Math.random()*35)}%</div>
+            <div class="fi-metric-l">Confidence</div>
+          </div>
+        </div>
+        <div class="fi-signals">
+          <span class="fi-sig">Search <span class="n">+${Math.round(Math.random()*180+20)}%</span></span>
+          <span class="fi-sig">Social mentions <span class="n">${Math.round(Math.random()*400+80)}K</span></span>
+          <span class="fi-sig">Editorial coverage <span class="n">${Math.round(Math.random()*50+10)} pubs</span></span>
+          <span class="fi-sig">Retail sell-through <span class="n">${Math.round(Math.random()*40+20)}%</span></span>
+          <span class="fi-sig">Runway appearances <span class="n">${Math.round(Math.random()*25+5)}</span></span>
+        </div>
+        <div class="fi-divergence">
+          <span class="fi-div-label">Crowd vs FI divergence</span>
+          <span class="fi-div-val ${divClass}">${divergence} pts · ${divLabel}</span>
+        </div>
       </div>
       <div class="trade-panel">
         <button class="trade-btn yes" onclick="selectSide('yes',${m.yes})"><span class="price">${m.yes}¢</span><span class="label">Buy Yes</span></button>
