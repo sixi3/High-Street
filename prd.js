@@ -502,6 +502,164 @@ const html = /* html */`<!DOCTYPE html>
     .foot-right p { font-size:13px; line-height:1.7; color:rgba(255,255,255,.3); margin-bottom:14px; }
     .foot-meta { display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.2); letter-spacing:.06em; border-top:1px solid rgba(255,255,255,.08); padding-top:24px; }
 
+    /* ── INTEGRITY SECTION (DARK) ─────────────────── */
+    .section.bg-dark { background:var(--black); color:white; }
+    .section.bg-dark .kicker-num { color:var(--yellow); }
+    .section.bg-dark .kicker-line { background:var(--yellow); }
+    .section.bg-dark .kicker-label { color:rgba(255,255,255,.35); }
+    .section.bg-dark .display-title .w3 { color:rgba(255,255,255,.28); }
+    .section.bg-dark .display-title .w7 { color:white; }
+    .section.bg-dark .display-title .w7.yellow { color:var(--yellow); }
+    .section.bg-dark .section-body { color:rgba(255,255,255,.55); }
+
+    /* Insider network hero */
+    .ins-hero-label {
+      font-family:var(--mono); font-size:10px;
+      color:rgba(255,255,255,.35); letter-spacing:.14em;
+      text-transform:uppercase; margin-bottom:20px;
+      display:flex; align-items:center; gap:10px;
+    }
+    .ins-hero-label::before {
+      content:''; width:6px; height:6px; background:var(--red); border-radius:50%;
+      animation:blink 2s infinite;
+    }
+    .ins-network { width:100%; height:auto; display:block; }
+    .ins-network .center-pulse {
+      transform-origin:600px 190px;
+      animation:pulseRing 3s ease-out infinite;
+    }
+    @keyframes pulseRing {
+      0%   { transform:scale(.9); opacity:.6; }
+      70%  { transform:scale(1.35); opacity:0; }
+      100% { transform:scale(1.35); opacity:0; }
+    }
+    .ins-network-caption {
+      display:flex; justify-content:space-between; align-items:center;
+      margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,.08);
+      font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.35);
+      letter-spacing:.1em; text-transform:uppercase;
+    }
+    .ins-network-caption strong { color:var(--yellow); font-weight:700; }
+
+    /* Comparison table */
+    .ins-compare {
+      margin-top:80px; border:1px solid rgba(255,255,255,.1);
+      border-radius:4px; overflow:hidden;
+    }
+    .ins-compare-head {
+      display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr;
+      background:rgba(255,255,255,.03);
+      border-bottom:1px solid rgba(255,255,255,.1);
+    }
+    .ins-compare-head > div {
+      padding:22px 24px; border-right:1px solid rgba(255,255,255,.08);
+      font-family:var(--mono); font-size:10px; letter-spacing:.12em;
+      text-transform:uppercase; color:rgba(255,255,255,.4);
+    }
+    .ins-compare-head > div:last-child { border-right:none; }
+    .ins-compare-head .hs {
+      background:var(--blue); color:white; font-weight:700;
+    }
+    .ins-row {
+      display:grid; grid-template-columns:1.4fr 1fr 1fr 1.2fr;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .ins-row:last-child { border-bottom:none; }
+    .ins-row > div {
+      padding:18px 24px; border-right:1px solid rgba(255,255,255,.06);
+      font-size:13px; color:rgba(255,255,255,.75);
+      display:flex; align-items:center; gap:8px;
+    }
+    .ins-row > div:last-child { border-right:none; }
+    .ins-row > div:first-child { font-weight:600; color:white; }
+    .ins-row .hs { background:rgba(31,78,245,.08); color:white; }
+    .ins-chk {
+      font-family:var(--mono); font-size:11px; font-weight:700;
+    }
+    .ins-chk.y { color:var(--yellow); }
+    .ins-chk.n { color:rgba(255,255,255,.25); }
+
+    /* Defense stack — 5 cards */
+    .ins-stack-head {
+      margin-top:96px; margin-bottom:28px;
+      display:flex; justify-content:space-between; align-items:flex-end;
+    }
+    .ins-stack-title {
+      font-family:var(--display); font-weight:700;
+      font-variation-settings:'wght' 700;
+      font-size:44px; line-height:.95; letter-spacing:-.01em;
+    }
+    .ins-stack-title .y { color:var(--yellow); }
+    .ins-stack-meta {
+      font-family:var(--mono); font-size:10px; color:rgba(255,255,255,.35);
+      letter-spacing:.1em; text-transform:uppercase;
+    }
+    .ins-stack {
+      display:grid; grid-template-columns:repeat(5,1fr); gap:10px;
+    }
+    .ins-card {
+      background:#0E0E0E; border:1px solid rgba(255,255,255,.08);
+      border-radius:4px; padding:26px 22px;
+      display:flex; flex-direction:column;
+      position:relative; overflow:hidden;
+      transition:transform .3s cubic-bezier(.23,1,.32,1),
+                  border-color .3s, background .3s;
+    }
+    .ins-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:var(--yellow); transform:scaleX(0);
+      transform-origin:left; transition:transform .4s cubic-bezier(.23,1,.32,1);
+    }
+    .ins-card:hover { transform:translateY(-4px); border-color:rgba(255,213,66,.3); background:#111; }
+    .ins-card:hover::before { transform:scaleX(1); }
+    .ins-phase {
+      font-family:var(--mono); font-size:9px; color:var(--yellow);
+      letter-spacing:.14em; text-transform:uppercase; margin-bottom:18px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .ins-phase-dot {
+      width:5px; height:5px; background:var(--yellow); border-radius:50%;
+    }
+    .ins-illust {
+      height:110px; display:flex; align-items:center; justify-content:center;
+      margin-bottom:20px; padding:8px 0;
+    }
+    .ins-illust svg { width:100%; height:100%; max-width:140px; }
+    .ins-name {
+      font-family:var(--display); font-weight:700;
+      font-variation-settings:'wght' 700;
+      font-size:19px; line-height:1.1; margin-bottom:10px; color:white;
+    }
+    .ins-desc {
+      font-size:12px; color:rgba(255,255,255,.5); line-height:1.6;
+      margin-bottom:16px; flex:1;
+    }
+    .ins-mech {
+      font-family:var(--mono); font-size:9px; color:rgba(255,255,255,.4);
+      letter-spacing:.06em; text-transform:uppercase;
+      padding-top:14px; border-top:1px solid rgba(255,255,255,.08);
+    }
+    .ins-mech strong { color:var(--yellow); font-weight:700; }
+
+    /* Bottom headline */
+    .ins-headline {
+      margin-top:96px; text-align:center;
+      padding:56px 24px; border-top:1px solid rgba(255,255,255,.08);
+    }
+    .ins-headline-q {
+      font-family:var(--display); font-weight:300;
+      font-variation-settings:'wght' 300;
+      font-size:clamp(28px,3.4vw,46px); line-height:1.1;
+      color:rgba(255,255,255,.45); max-width:900px; margin:0 auto 18px;
+    }
+    .ins-headline-a {
+      font-family:var(--display); font-weight:700;
+      font-variation-settings:'wght' 700;
+      font-size:clamp(32px,4vw,56px); line-height:1.05;
+      color:white; max-width:1000px; margin:0 auto;
+    }
+    .ins-headline-a .y { color:var(--yellow); }
+
     /* ── HELPERS ─────────────────────────────────── */
     .mt48 { margin-top:48px; } .mt64 { margin-top:64px; }
   </style>
@@ -518,6 +676,7 @@ const html = /* html */`<!DOCTYPE html>
     <a href="#overview"  class="nav-link">Overview</a>
     <a href="#features"  class="nav-link">Features</a>
     <a href="#markets"   class="nav-link">Markets</a>
+    <a href="#integrity" class="nav-link">Integrity</a>
     <a href="#tech"      class="nav-link">Tech</a>
     <a href="#roadmap"   class="nav-link">Roadmap</a>
   </div>
@@ -741,10 +900,264 @@ const html = /* html */`<!DOCTYPE html>
 
 <hr class="div">
 
+<!-- ── MARKET INTEGRITY ─────────────────────────────── -->
+<section class="section bg-dark" id="integrity">
+  <div class="wrap">
+    <div class="kicker r"><span class="kicker-num">05</span><span class="kicker-line"></span><span class="kicker-label">Market Integrity</span></div>
+    <h2 class="display-title r d1">
+      <span class="w3">Insider trading,</span>
+      <span class="w7 yellow">structurally impossible.</span>
+    </h2>
+    <p class="section-body r d2" style="max-width:680px">Fashion's insider networks are small and leaky. Forty people at a brand know a designer appointment before press release drops. Polymarket can't solve this — its order book is open. Kalshi excludes these markets entirely. We built a five-layer defense that turns constraint into a feature.</p>
+
+    <!-- THE PROBLEM — network visualization -->
+    <div class="r d3" style="margin-top:72px">
+      <div class="ins-hero-label">THE THREAT MODEL — Fashion insider networks are small, concentrated, and leaky</div>
+      <svg class="ins-network" viewBox="0 0 1200 380" preserveAspectRatio="xMidYMid meet">
+        <!-- connecting lines -->
+        <g stroke="rgba(255,213,66,.18)" stroke-width="1" stroke-dasharray="2 4">
+          <line x1="600" y1="190" x2="1080" y2="190"/>
+          <line x1="600" y1="190" x2="940" y2="78"/>
+          <line x1="600" y1="190" x2="600" y2="40"/>
+          <line x1="600" y1="190" x2="260" y2="78"/>
+          <line x1="600" y1="190" x2="120" y2="190"/>
+          <line x1="600" y1="190" x2="260" y2="302"/>
+          <line x1="600" y1="190" x2="600" y2="340"/>
+          <line x1="600" y1="190" x2="940" y2="302"/>
+        </g>
+        <!-- center pulse rings -->
+        <g class="center-pulse">
+          <circle cx="600" cy="190" r="88" fill="none" stroke="#1F4EF5" stroke-width="1" opacity=".4"/>
+        </g>
+        <circle cx="600" cy="190" r="108" fill="none" stroke="#1F4EF5" stroke-width="1" opacity=".15"/>
+        <!-- center market node -->
+        <circle cx="600" cy="190" r="68" fill="#1F4EF5"/>
+        <circle cx="600" cy="190" r="68" fill="none" stroke="#FFD542" stroke-width="1.5" opacity=".4"/>
+        <text x="600" y="176" text-anchor="middle" fill="rgba(255,255,255,.55)" font-family="Space Mono" font-size="9" font-weight="700" letter-spacing="1">MARKET</text>
+        <text x="600" y="196" text-anchor="middle" fill="white" font-family="Melodrama" font-weight="700" font-size="16">Kanye → Gucci?</text>
+        <text x="600" y="214" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Space Mono" font-size="8">RES 2026-12-31</text>
+
+        <!-- insider nodes + labels -->
+        <g font-family="Space Mono" font-size="10" font-weight="700" fill="#FFD542" letter-spacing="1">
+          <circle cx="1080" cy="190" r="9" fill="#FFD542"/>
+          <text x="1100" y="187">PR AGENCIES</text>
+          <text x="1100" y="200" fill="rgba(255,255,255,.4)" font-weight="400">~12 people</text>
+
+          <circle cx="940" cy="78" r="9" fill="#FFD542"/>
+          <text x="960" y="75">BOARD MEMBERS</text>
+          <text x="960" y="88" fill="rgba(255,255,255,.4)" font-weight="400">~8 people</text>
+
+          <circle cx="600" cy="40" r="9" fill="#FFD542"/>
+          <text x="600" y="24" text-anchor="middle">BRAND HR / EXECS</text>
+          <text x="600" y="16" text-anchor="middle" fill="rgba(255,255,255,.4)" font-weight="400">~6 people</text>
+
+          <circle cx="260" cy="78" r="9" fill="#FFD542"/>
+          <text x="240" y="75" text-anchor="end">HEADHUNTERS</text>
+          <text x="240" y="88" text-anchor="end" fill="rgba(255,255,255,.4)" font-weight="400">~4 people</text>
+
+          <circle cx="120" cy="190" r="9" fill="#FFD542"/>
+          <text x="100" y="187" text-anchor="end">EDITORIAL</text>
+          <text x="100" y="200" text-anchor="end" fill="rgba(255,255,255,.4)" font-weight="400">BoF · Vogue · WWD</text>
+
+          <circle cx="260" cy="302" r="9" fill="#FFD542"/>
+          <text x="240" y="299" text-anchor="end">CONTRACTS LAWYERS</text>
+          <text x="240" y="312" text-anchor="end" fill="rgba(255,255,255,.4)" font-weight="400">Kering legal</text>
+
+          <circle cx="600" cy="340" r="9" fill="#FFD542"/>
+          <text x="600" y="362" text-anchor="middle">SHOWROOM / STAFF</text>
+          <text x="600" y="374" text-anchor="middle" fill="rgba(255,255,255,.4)" font-weight="400">patternmakers · assistants</text>
+
+          <circle cx="940" cy="302" r="9" fill="#FFD542"/>
+          <text x="960" y="299">DESIGNER CANDIDATE</text>
+          <text x="960" y="312" fill="rgba(255,255,255,.4)" font-weight="400">& their team</text>
+        </g>
+      </svg>
+      <div class="ins-network-caption">
+        <span>~<strong>40 people</strong> globally know before press release</span>
+        <span>EACH NODE = DIRECT MATERIAL INFORMATION ACCESS</span>
+      </div>
+    </div>
+
+    <!-- COMPARISON TABLE -->
+    <div class="ins-compare r d1">
+      <div class="ins-compare-head">
+        <div>Defense Mechanism</div>
+        <div>Polymarket</div>
+        <div>Kalshi</div>
+        <div class="hs">★ High Street</div>
+      </div>
+      <div class="ins-row">
+        <div>Position limits</div>
+        <div><span class="ins-chk n">✕ None</span></div>
+        <div><span class="ins-chk y">✓ $25K cap</span></div>
+        <div class="hs"><span class="ins-chk y">✓ Tiered by risk</span></div>
+      </div>
+      <div class="ins-row">
+        <div>Identity KYC</div>
+        <div><span class="ins-chk n">~ Partial</span></div>
+        <div><span class="ins-chk y">✓ Full SSN</span></div>
+        <div class="hs"><span class="ins-chk y">✓ Tiered + ZK</span></div>
+      </div>
+      <div class="ins-row">
+        <div>Time-decay payouts</div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div class="hs"><span class="ins-chk y">✓ Novel</span></div>
+      </div>
+      <div class="ins-row">
+        <div>Sealed commit-reveal markets</div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div class="hs"><span class="ins-chk y">✓ High-risk only</span></div>
+      </div>
+      <div class="ins-row">
+        <div>ZK employer non-affiliation proof</div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div><span class="ins-chk n">✕</span></div>
+        <div class="hs"><span class="ins-chk y">✓ With LVMH / Kering</span></div>
+      </div>
+      <div class="ins-row">
+        <div>Graph-based anomaly detection</div>
+        <div><span class="ins-chk n">~ Post-hoc</span></div>
+        <div><span class="ins-chk n">~ Manual</span></div>
+        <div class="hs"><span class="ins-chk y">✓ FI-powered</span></div>
+      </div>
+    </div>
+
+    <!-- DEFENSE STACK -->
+    <div class="ins-stack-head r d1">
+      <div class="ins-stack-title">Five defensive<br>layers, <span class="y">stacked.</span></div>
+      <div class="ins-stack-meta">Phase 1 → Phase 5</div>
+    </div>
+
+    <div class="ins-stack">
+
+      <!-- 01 — Position Limits & KYC -->
+      <div class="ins-card r d1">
+        <div class="ins-phase"><span class="ins-phase-dot"></span>LAYER 01 · PHASE 1</div>
+        <div class="ins-illust">
+          <svg viewBox="0 0 140 110" preserveAspectRatio="xMidYMid meet">
+            <line x1="10" y1="22" x2="130" y2="22" stroke="#FFD542" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <text x="128" y="16" fill="#FFD542" font-family="Space Mono" font-size="8" text-anchor="end" font-weight="700">MAX</text>
+            <rect x="20" y="70" width="22" height="30" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+            <rect x="52" y="50" width="22" height="50" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"/>
+            <rect x="84" y="28" width="22" height="72" fill="#FFD542" opacity=".85"/>
+            <line x1="10" y1="100" x2="130" y2="100" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="ins-name">Position Limits & KYC</div>
+        <div class="ins-desc">Every market has tiered caps based on insider-risk score. Max exposure for high-risk markets: $500. Full identity verification required for real-money play.</div>
+        <div class="ins-mech"><strong>Mechanism:</strong> Bounds the damage any single insider can inflict.</div>
+      </div>
+
+      <!-- 02 — Time-Decay Payouts -->
+      <div class="ins-card r d2">
+        <div class="ins-phase"><span class="ins-phase-dot"></span>LAYER 02 · PHASE 2</div>
+        <div class="ins-illust">
+          <svg viewBox="0 0 140 110" preserveAspectRatio="xMidYMid meet">
+            <line x1="12" y1="92" x2="132" y2="92" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <line x1="12" y1="12" x2="12" y2="92" stroke="rgba(255,255,255,.2)" stroke-width="1"/>
+            <path d="M12,22 Q62,38 132,88" fill="none" stroke="#FFD542" stroke-width="2"/>
+            <circle cx="12" cy="22" r="3" fill="#FFD542"/>
+            <circle cx="132" cy="88" r="3" fill="rgba(255,255,255,.5)"/>
+            <text x="16" y="18" fill="#FFD542" font-family="Space Mono" font-size="8" font-weight="700">1.5×</text>
+            <text x="128" y="84" fill="rgba(255,255,255,.6)" font-family="Space Mono" font-size="8" text-anchor="end">1.0×</text>
+            <text x="72" y="106" text-anchor="middle" fill="rgba(255,255,255,.3)" font-family="Space Mono" font-size="6">TIME → RESOLUTION</text>
+          </svg>
+        </div>
+        <div class="ins-name">Time-Decay Payouts</div>
+        <div class="ins-desc">Payouts scale by how early you traded. Bet 90 days out, earn 1.5×. Bet 1 day out, earn 1.01×. Insiders who learn the answer late are structurally penalised.</div>
+        <div class="ins-mech"><strong>Mechanism:</strong> Rewards belief over information.</div>
+      </div>
+
+      <!-- 03 — Commit-Reveal -->
+      <div class="ins-card r d3">
+        <div class="ins-phase"><span class="ins-phase-dot"></span>LAYER 03 · PHASE 3</div>
+        <div class="ins-illust">
+          <svg viewBox="0 0 140 110" preserveAspectRatio="xMidYMid meet">
+            <line x1="12" y1="58" x2="128" y2="58" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+            <rect x="14" y="38" width="30" height="38" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+            <path d="M22,38 L22,32 Q22,24 29,24 Q36,24 36,32 L36,38" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+            <rect x="26" y="50" width="6" height="10" fill="rgba(255,255,255,.55)"/>
+            <line x1="46" y1="58" x2="56" y2="58" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+            <polygon points="54,55 58,58 54,61" fill="rgba(255,255,255,.3)"/>
+            <rect x="58" y="38" width="30" height="38" fill="none" stroke="#FFD542" stroke-width="1.5"/>
+            <line x1="58" y1="38" x2="88" y2="76" stroke="#FFD542" stroke-width="1" stroke-dasharray="2 2"/>
+            <line x1="90" y1="58" x2="100" y2="58" stroke="rgba(255,255,255,.3)" stroke-width="1"/>
+            <polygon points="98,55 102,58 98,61" fill="rgba(255,255,255,.3)"/>
+            <circle cx="116" cy="58" r="12" fill="none" stroke="#FFD542" stroke-width="1.5"/>
+            <path d="M110,58 L114,62 L122,52" fill="none" stroke="#FFD542" stroke-width="1.5"/>
+            <text x="29" y="94" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Space Mono" font-size="6">COMMIT</text>
+            <text x="73" y="94" text-anchor="middle" fill="#FFD542" font-family="Space Mono" font-size="6">REVEAL</text>
+            <text x="116" y="94" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Space Mono" font-size="6">SETTLE</text>
+          </svg>
+        </div>
+        <div class="ins-name">Sealed Markets</div>
+        <div class="ins-desc">For high-risk markets, trades are encrypted hashes until the commit window closes. Late insiders are physically unable to join — the book is sealed before they know.</div>
+        <div class="ins-mech"><strong>Mechanism:</strong> Commit-reveal cryptography. Borrowed from Ethereum randomness beacons.</div>
+      </div>
+
+      <!-- 04 — ZK Non-Affiliation -->
+      <div class="ins-card r d4">
+        <div class="ins-phase"><span class="ins-phase-dot"></span>LAYER 04 · PHASE 4</div>
+        <div class="ins-illust">
+          <svg viewBox="0 0 140 110" preserveAspectRatio="xMidYMid meet">
+            <path d="M70,14 L104,28 L104,56 Q104,82 70,98 Q36,82 36,56 L36,28 Z" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.5"/>
+            <path d="M70,22 L97,33 L97,56 Q97,76 70,90 Q43,76 43,56 L43,33 Z" fill="rgba(255,213,66,.06)" stroke="#FFD542" stroke-width="1" stroke-dasharray="3 2"/>
+            <text x="70" y="58" text-anchor="middle" fill="#FFD542" font-family="Space Mono" font-weight="700" font-size="18">zk</text>
+            <text x="70" y="72" text-anchor="middle" fill="rgba(255,255,255,.4)" font-family="Space Mono" font-size="6" letter-spacing="1">PROOF</text>
+          </svg>
+        </div>
+        <div class="ins-name">ZK Employer Proof</div>
+        <div class="ins-desc">Partner with LVMH, Kering, Richemont to issue verifiable credentials. Users generate a zero-knowledge proof that their employer is not in the market's risk-set — without revealing who they work for.</div>
+        <div class="ins-mech"><strong>Mechanism:</strong> zkSNARK proof of set exclusion. Zero identity leakage.</div>
+      </div>
+
+      <!-- 05 — FI Graph Detection -->
+      <div class="ins-card r d5">
+        <div class="ins-phase"><span class="ins-phase-dot"></span>LAYER 05 · PHASE 5</div>
+        <div class="ins-illust">
+          <svg viewBox="0 0 140 110" preserveAspectRatio="xMidYMid meet">
+            <g stroke="rgba(255,255,255,.22)" stroke-width="1">
+              <line x1="24" y1="28" x2="70" y2="55"/>
+              <line x1="70" y1="55" x2="116" y2="28"/>
+              <line x1="70" y1="55" x2="30" y2="82"/>
+              <line x1="70" y1="55" x2="108" y2="85"/>
+              <line x1="24" y1="28" x2="30" y2="82"/>
+              <line x1="116" y1="28" x2="108" y2="85"/>
+              <line x1="24" y1="28" x2="116" y2="28"/>
+            </g>
+            <circle cx="24" cy="28" r="4" fill="rgba(255,255,255,.7)"/>
+            <circle cx="116" cy="28" r="4" fill="rgba(255,255,255,.7)"/>
+            <circle cx="30" cy="82" r="4" fill="rgba(255,255,255,.7)"/>
+            <circle cx="108" cy="85" r="4" fill="rgba(255,255,255,.7)"/>
+            <circle cx="70" cy="55" r="16" fill="none" stroke="#FFD542" stroke-width="1" opacity=".3"/>
+            <circle cx="70" cy="55" r="11" fill="none" stroke="#FFD542" stroke-width="1" opacity=".55"/>
+            <circle cx="70" cy="55" r="7" fill="#FFD542"/>
+            <text x="70" y="104" text-anchor="middle" fill="#FFD542" font-family="Space Mono" font-size="6" font-weight="700" letter-spacing="1">ANOMALY</text>
+          </svg>
+        </div>
+        <div class="ins-name">FI Graph Detection</div>
+        <div class="ins-desc">Every trader is scored against FI's fashion intelligence graph. Users 1–2 degrees from the brand, candidate, or agency auto-flag for review. Trained on Polymarket's historical insider patterns.</div>
+        <div class="ins-mech"><strong>Mechanism:</strong> Graph ML + FI proprietary network data.</div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM HEADLINE -->
+    <div class="ins-headline r">
+      <div class="ins-headline-q">"Every other prediction market prohibits insider trading."</div>
+      <div class="ins-headline-a">High Street makes it <span class="y">structurally impossible.</span></div>
+    </div>
+  </div>
+</section>
+
+<hr class="div">
+
 <!-- ── TECH ──────────────────────────────────────────── -->
 <section class="section" id="tech">
   <div class="wrap">
-    <div class="kicker r"><span class="kicker-num">05</span><span class="kicker-line"></span><span class="kicker-label">Technical Architecture</span></div>
+    <div class="kicker r"><span class="kicker-num">06</span><span class="kicker-line"></span><span class="kicker-label">Technical Architecture</span></div>
     <h2 class="display-title r d1">
       <span class="w3">Web2 UX.</span>
       <span class="w7 blue">Web3 trust.</span>
@@ -819,7 +1232,7 @@ const html = /* html */`<!DOCTYPE html>
 <!-- ── BUSINESS MODEL ────────────────────────────────── -->
 <section class="section bg-cream">
   <div class="wrap">
-    <div class="kicker r"><span class="kicker-num">06</span><span class="kicker-line"></span><span class="kicker-label">Business Model</span></div>
+    <div class="kicker r"><span class="kicker-num">07</span><span class="kicker-line"></span><span class="kicker-label">Business Model</span></div>
     <h2 class="display-title r d1">
       <span class="w3">Five streams.</span>
       <span class="w7 blue">One flywheel.</span>
@@ -839,7 +1252,7 @@ const html = /* html */`<!DOCTYPE html>
 <!-- ── METRICS ───────────────────────────────────────── -->
 <section class="section">
   <div class="wrap">
-    <div class="kicker r"><span class="kicker-num">07</span><span class="kicker-line"></span><span class="kicker-label">Success Metrics — Month 12</span></div>
+    <div class="kicker r"><span class="kicker-num">08</span><span class="kicker-line"></span><span class="kicker-label">Success Metrics — Month 12</span></div>
     <h2 class="display-title r d1">
       <span class="w3">How we measure</span>
       <span class="w7 blue">success.</span>
@@ -860,7 +1273,7 @@ const html = /* html */`<!DOCTYPE html>
 <!-- ── ROADMAP ───────────────────────────────────────── -->
 <section class="section bg-cream" id="roadmap">
   <div class="wrap">
-    <div class="kicker r"><span class="kicker-num">08</span><span class="kicker-line"></span><span class="kicker-label">Phased Roadmap</span></div>
+    <div class="kicker r"><span class="kicker-num">09</span><span class="kicker-line"></span><span class="kicker-label">Phased Roadmap</span></div>
     <h2 class="display-title r d1">
       <span class="w3">Four phases.</span>
       <span class="w7 blue">18 months.</span>
@@ -911,7 +1324,7 @@ const html = /* html */`<!DOCTYPE html>
 <!-- ── OUT OF SCOPE ───────────────────────────────────── -->
 <section class="section">
   <div class="wrap">
-    <div class="kicker r"><span class="kicker-num">09</span><span class="kicker-line"></span><span class="kicker-label">Out of Scope — v1.0</span></div>
+    <div class="kicker r"><span class="kicker-num">10</span><span class="kicker-line"></span><span class="kicker-label">Out of Scope — v1.0</span></div>
     <h2 class="display-title r d1">
       <span class="w3">What we're</span>
       <span class="w7 red">not building yet.</span>
