@@ -1062,7 +1062,7 @@
         </div>
         <div class="ins-name">Time-Decay Payouts</div>
         <div class="ins-desc">Payout multiplier scales with time-to-resolution. Earlier positions earn higher multipliers; late entries earn near-base payout. High-risk markets also apply a final-window freeze.</div>
-        <div class="ins-mech"><strong>How it works:</strong> Example multiplier: <code>1 + (days_before_resolution / 90) * 0.5</code>. A 90-day position gets ~1.5x; a 1-day position gets ~1.01x. This rewards early conviction over last-minute leaks.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Example multiplier: <code>1 + (days_before_resolution / 90) * 0.5</code>. A 90-day position gets ~1.5x; a 1-day position gets ~1.01x. This rewards early conviction over last-minute leaks. Time-decay reduces late-information sniping, but does not neutralize day-0 insiders; those are handled by risk-tier limits, affiliation controls, and sealed-market design.</div>
       </div>
 
       <!-- 03 — Commit-Reveal -->
