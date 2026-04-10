@@ -897,9 +897,9 @@
     <div class="kicker r"><span class="kicker-num">05</span><span class="kicker-line"></span><span class="kicker-label">Market Integrity</span></div>
     <h2 class="display-title r d1">
       <span class="w3">Insider trading,</span>
-      <span class="w7 yellow">structurally impossible.</span>
+      <span class="w7 yellow">structurally resistant.</span>
     </h2>
-    <p class="section-body r d2" style="max-width:680px">Fashion's insider networks are small and leaky. Forty people at a brand know a designer appointment before press release drops. Polymarket can't solve this — its order book is open. Kalshi excludes these markets entirely. We built a five-layer defense that turns constraint into a feature.</p>
+    <p class="section-body r d2" style="max-width:760px">Fashion insider networks are small and leaky. A few dozen people can know a designer move before public release. Instead of one blunt rule, High Street uses a risk-tiered defense stack: strict controls for high-risk factual markets, lighter controls for low-risk trend-index markets. Goal: make insider advantage expensive, detectable, and low ROI.</p>
 
     <!-- THE PROBLEM — network visualization -->
     <div class="r d3" style="margin-top:72px">
@@ -987,7 +987,7 @@
         <div>Identity KYC</div>
         <div><span class="ins-chk n">~ Partial</span></div>
         <div><span class="ins-chk y">✓ Full SSN</span></div>
-        <div class="hs"><span class="ins-chk y">✓ Tiered + ZK</span></div>
+        <div class="hs"><span class="ins-chk y">✓ Risk-tiered + optional ZK</span></div>
       </div>
       <div class="ins-row">
         <div>Time-decay payouts</div>
@@ -1005,7 +1005,7 @@
         <div>ZK employer non-affiliation proof</div>
         <div><span class="ins-chk n">✕</span></div>
         <div><span class="ins-chk n">✕</span></div>
-        <div class="hs"><span class="ins-chk y">✓ With LVMH / Kering</span></div>
+        <div class="hs"><span class="ins-chk y">✓ Optional high-trust tier</span></div>
       </div>
       <div class="ins-row">
         <div>Graph-based anomaly detection</div>
@@ -1014,6 +1014,10 @@
         <div class="hs"><span class="ins-chk y">✓ FI-powered</span></div>
       </div>
     </div>
+
+    <p class="section-body r d2" style="max-width:760px;margin-top:28px">
+      Additional controls in high-risk markets: <strong>random execution delay bands</strong> (removes precision sniping), <strong>final-window trade freeze</strong> (blocks last-minute leak exploitation), and <strong>progressive limit unlocks</strong> (new accounts scale slowly with clean history).
+    </p>
 
     <!-- DEFENSE STACK -->
     <div class="ins-stack-head r d1">
@@ -1037,8 +1041,8 @@
           </svg>
         </div>
         <div class="ins-name">Position Limits & KYC</div>
-        <div class="ins-desc">Every market has tiered caps based on insider-risk score. Max exposure for high-risk markets: $500. Full identity verification required for real-money play.</div>
-        <div class="ins-mech"><strong>Mechanism:</strong> Bounds the damage any single insider can inflict.</div>
+        <div class="ins-desc">Every market gets a risk score. Higher-risk markets get tighter position caps and stronger identity checks; lower-risk markets keep lighter friction.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Risk tier sets max size + required verification level (anonymous small, verified medium, high-trust large). This caps damage and raises the cost of abuse.</div>
       </div>
 
       <!-- 02 — Time-Decay Payouts -->
@@ -1057,8 +1061,8 @@
           </svg>
         </div>
         <div class="ins-name">Time-Decay Payouts</div>
-        <div class="ins-desc">Payouts scale by how early you traded. Bet 90 days out, earn 1.5×. Bet 1 day out, earn 1.01×. Insiders who learn the answer late are structurally penalised.</div>
-        <div class="ins-mech"><strong>Mechanism:</strong> Rewards belief over information.</div>
+        <div class="ins-desc">Payout multiplier scales with time-to-resolution. Earlier positions earn higher multipliers; late entries earn near-base payout. High-risk markets also apply a final-window freeze.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Example multiplier: <code>1 + (days_before_resolution / 90) * 0.5</code>. A 90-day position gets ~1.5x; a 1-day position gets ~1.01x. This rewards early conviction over last-minute leaks.</div>
       </div>
 
       <!-- 03 — Commit-Reveal -->
@@ -1084,8 +1088,8 @@
           </svg>
         </div>
         <div class="ins-name">Sealed Markets</div>
-        <div class="ins-desc">For high-risk markets, trades are encrypted hashes until the commit window closes. Late insiders are physically unable to join — the book is sealed before they know.</div>
-        <div class="ins-mech"><strong>Mechanism:</strong> Commit-reveal cryptography. Borrowed from Ethereum randomness beacons.</div>
+        <div class="ins-desc">Only selected high-risk markets use commit-reveal. During commit, users submit hidden commitments; during reveal, they disclose position details; then settlement proceeds.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Commit hash locks intent without revealing side/size. If insider info appears after commit close, it cannot be exploited. Use sparingly to preserve live-market energy.</div>
       </div>
 
       <!-- 04 — ZK Non-Affiliation -->
@@ -1100,8 +1104,8 @@
           </svg>
         </div>
         <div class="ins-name">ZK Employer Proof</div>
-        <div class="ins-desc">Partner with LVMH, Kering, Richemont to issue verifiable credentials. Users generate a zero-knowledge proof that their employer is not in the market's risk-set — without revealing who they work for.</div>
-        <div class="ins-mech"><strong>Mechanism:</strong> zkSNARK proof of set exclusion. Zero identity leakage.</div>
+        <div class="ins-desc">Optional high-trust lane: users prove they are not affiliated with an entity in that market's insider risk-set, without revealing employer identity.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Verifiable credential + zero-knowledge set-exclusion proof. Passed proof unlocks higher limits; no raw employer data is exposed.</div>
       </div>
 
       <!-- 05 — FI Graph Detection -->
@@ -1129,8 +1133,8 @@
           </svg>
         </div>
         <div class="ins-name">FI Graph Detection</div>
-        <div class="ins-desc">Every trader is scored against FI's fashion intelligence graph. Users 1–2 degrees from the brand, candidate, or agency auto-flag for review. Trained on Polymarket's historical insider patterns.</div>
-        <div class="ins-mech"><strong>Mechanism:</strong> Graph ML + FI proprietary network data.</div>
+        <div class="ins-desc">Behavioral and relationship anomaly engine. Trades near sensitive events, coordinated clusters, and risky graph proximity are auto-flagged and rate-limited for review.</div>
+        <div class="ins-mech"><strong>How it works:</strong> Combines graph features (brand/candidate adjacency) with behavior features (size jump, timing, account maturity, cluster correlation). Actions: alert, delay band, freeze, escalate.</div>
       </div>
 
     </div>
@@ -1138,7 +1142,7 @@
     <!-- BOTTOM HEADLINE -->
     <div class="ins-headline r">
       <div class="ins-headline-q">"Every other prediction market prohibits insider trading."</div>
-      <div class="ins-headline-a">High Street makes it <span class="y">structurally impossible.</span></div>
+      <div class="ins-headline-a">High Street makes insider edge <span class="y">costly, constrained, and detectable.</span></div>
     </div>
   </div>
 </section>
