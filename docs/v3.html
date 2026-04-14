@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>High Street - Swipe Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,500;9..40,700;9..40,900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fffaf2;
+  --ink:#090909;
+  --muted:#76706a;
+  --line:rgba(9,9,9,.16);
+  --cyan:#16e7ff;
+  --red:#ff2d55;
+  --lime:#c8ff37;
+  --cream:#fff2b8;
+  --steel:#1a1a1a;
+  --smoke:#f1eae1;
+  --display:'Archivo Black',sans-serif;
+  --body:'DM Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:34px 20px;
+  overflow:hidden;
+  color:var(--paper);
+  font-family:var(--body);
+  background:
+    linear-gradient(135deg,rgba(255,45,85,.2) 0 10%,transparent 10% 26%,rgba(22,231,255,.18) 26% 36%,transparent 36% 100%),
+    radial-gradient(circle at 20% 18%,rgba(200,255,55,.22),transparent 24%),
+    radial-gradient(circle at 78% 80%,rgba(255,45,85,.2),transparent 26%),
+    #050505;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+  background-size:34px 34px;
+  mask-image:radial-gradient(circle at 50% 50%,#000,transparent 72%);
+}
+button{font:inherit;color:inherit}
+.device-wrap{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
+.device-meta{
+  margin-bottom:16px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  color:rgba(255,250,242,.74);
+  font:800 10px/1 var(--mono);
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.device-meta b{color:var(--lime)}
+.meta-dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:14px 0 0 var(--cyan)}
+.phone{
+  width:390px;
+  height:844px;
+  position:relative;
+  overflow:hidden;
+  border:10px solid #0b0b0b;
+  border-radius:56px;
+  background:#080808;
+  box-shadow:
+    0 0 0 3px var(--paper),
+    0 0 0 6px #222,
+    16px 22px 0 rgba(255,45,85,.9),
+    -16px -14px 0 rgba(22,231,255,.65),
+    0 50px 120px rgba(0,0,0,.65);
+}
+.phone::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:126px;
+  height:30px;
+  border-radius:0 0 18px 18px;
+  background:#0b0b0b;
+  z-index:20;
+}
+.screen{
+  width:100%;
+  height:100%;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.08),transparent 16%),
+    #0a0a0a;
+}
+.screen::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:3;
+  background:linear-gradient(180deg,rgba(0,0,0,.22),transparent 16%,transparent 70%,rgba(0,0,0,.74));
+}
+.status{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:44px;
+  z-index:30;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  padding:0 25px 8px;
+  color:var(--paper);
+  font:900 13px/1 var(--body);
+}
+.status-right{font:800 10px/1 var(--mono);letter-spacing:.06em}
+.topbar{
+  position:absolute;
+  top:44px;
+  left:0;
+  right:0;
+  z-index:30;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 18px;
+}
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  text-transform:uppercase;
+}
+.brand-kicker{font:800 9px/1 var(--mono);letter-spacing:.16em;color:var(--lime)}
+.brand-name{font:400 23px/.86 var(--display);letter-spacing:0;color:var(--paper);text-shadow:2px 2px 0 var(--red),-2px -1px 0 var(--cyan)}
+.topbar-spacer{flex:1}
+.pill{
+  min-height:34px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:0 10px;
+  border:2px solid rgba(255,250,242,.9);
+  border-radius:8px;
+  background:rgba(9,9,9,.54);
+  backdrop-filter:blur(14px);
+  color:var(--paper);
+  box-shadow:0 4px 0 rgba(255,250,242,.14);
+  font:900 11px/1 var(--mono);
+}
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:8px;
+  display:grid;
+  place-items:center;
+  border:2px solid var(--paper);
+  background:var(--lime);
+  color:var(--ink);
+  font:900 12px/1 var(--mono);
+  box-shadow:3px 3px 0 var(--red);
+}
+.deck-shell{
+  position:absolute;
+  inset:96px 16px 104px;
+  z-index:8;
+}
+.deck{
+  position:relative;
+  width:100%;
+  height:100%;
+  perspective:900px;
+}
+.trend-card{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  border-radius:8px;
+  background:#111;
+  border:2px solid rgba(255,250,242,.92);
+  box-shadow:0 22px 60px rgba(0,0,0,.5),0 8px 0 rgba(255,250,242,.1);
+  touch-action:none;
+  cursor:grab;
+  transform-origin:50% 85%;
+  transition:transform .28s cubic-bezier(.2,.9,.18,1),opacity .24s ease;
+}
+.trend-card:active{cursor:grabbing}
+.trend-card.next{transform:translateY(16px) scale(.94);opacity:.66;filter:saturate(.8) brightness(.82)}
+.trend-card.after{transform:translateY(31px) scale(.88);opacity:.32;filter:saturate(.55) brightness(.7)}
+.trend-card img{
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  user-select:none;
+  pointer-events:none;
+  filter:saturate(1.08) contrast(1.04);
+}
+.trend-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(0,0,0,.22) 0%,transparent 24%,transparent 44%,rgba(0,0,0,.58) 72%,rgba(0,0,0,.94) 100%),
+    linear-gradient(90deg,rgba(255,45,85,.18),transparent 35%,transparent 65%,rgba(22,231,255,.2));
+  pointer-events:none;
+}
+.swipe-stamp{
+  position:absolute;
+  top:92px;
+  z-index:12;
+  min-width:132px;
+  padding:10px 12px;
+  border:3px solid currentColor;
+  border-radius:8px;
+  opacity:0;
+  transform:rotate(-10deg) scale(.82);
+  font:400 26px/.86 var(--display);
+  letter-spacing:0;
+  text-align:center;
+  text-transform:uppercase;
+  background:rgba(0,0,0,.34);
+  backdrop-filter:blur(8px);
+}
+.swipe-stamp small{display:block;margin-top:5px;font:900 9px/1 var(--mono);letter-spacing:.12em}
+.swipe-stamp.back{left:18px;color:var(--lime)}
+.swipe-stamp.fade{right:18px;color:var(--red);transform:rotate(10deg) scale(.82)}
+.card-top{
+  position:absolute;
+  top:15px;
+  left:14px;
+  right:14px;
+  z-index:10;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+.source-stack{display:flex;gap:6px;flex-wrap:wrap;max-width:220px}
+.source{
+  padding:7px 8px;
+  border:1px solid rgba(255,250,242,.65);
+  border-radius:8px;
+  background:rgba(0,0,0,.46);
+  backdrop-filter:blur(10px);
+  font:800 9px/1 var(--mono);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+.source.tiktok{color:var(--cyan)}
+.source.pin{color:var(--red)}
+.hotness{
+  padding:8px;
+  border-radius:8px;
+  background:var(--paper);
+  color:var(--ink);
+  box-shadow:3px 3px 0 var(--cyan);
+  font:900 10px/1 var(--mono);
+  white-space:nowrap;
+}
+.card-copy{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:114px;
+  z-index:10;
+}
+.trend-name{
+  max-width:310px;
+  color:var(--paper);
+  font:400 45px/.84 var(--display);
+  letter-spacing:0;
+  text-transform:uppercase;
+  text-shadow:3px 3px 0 rgba(255,45,85,.75),-2px -1px 0 rgba(22,231,255,.55);
+}
+.trend-prompt{
+  margin-top:12px;
+  max-width:310px;
+  color:rgba(255,250,242,.9);
+  font:900 18px/1.08 var(--body);
+}
+.market-strip{
+  position:absolute;
+  left:14px;
+  right:14px;
+  bottom:16px;
+  z-index:10;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:8px;
+}
+.market-stat{
+  min-height:70px;
+  padding:10px 9px;
+  border:1px solid rgba(255,250,242,.5);
+  border-radius:8px;
+  background:rgba(0,0,0,.52);
+  backdrop-filter:blur(12px);
+}
+.market-stat b{
+  display:block;
+  color:var(--paper);
+  font:400 21px/.9 var(--display);
+  letter-spacing:0;
+}
+.market-stat span{
+  display:block;
+  margin-top:7px;
+  color:rgba(255,250,242,.74);
+  font:800 9px/1.15 var(--mono);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.action-rail{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:30;
+  display:grid;
+  grid-template-columns:74px 1fr 74px;
+  gap:12px;
+  align-items:center;
+  padding:13px 16px 18px;
+  background:linear-gradient(180deg,transparent,rgba(0,0,0,.82) 25%,#050505);
+}
+.action-btn{
+  height:68px;
+  border:2px solid var(--paper);
+  border-radius:8px;
+  background:rgba(255,250,242,.08);
+  box-shadow:0 5px 0 rgba(255,250,242,.16);
+  cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease,background .12s ease;
+}
+.action-btn:active{transform:translateY(5px);box-shadow:0 0 0 rgba(0,0,0,0)}
+.action-btn.fade{color:var(--red)}
+.action-btn.back{color:var(--lime)}
+.action-btn strong{display:block;font:400 26px/.9 var(--display);letter-spacing:0;text-transform:uppercase}
+.action-btn span{display:block;margin-top:5px;font:900 9px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(255,250,242,.7)}
+.center-panel{
+  min-height:76px;
+  padding:10px 12px;
+  border:2px solid rgba(255,250,242,.72);
+  border-radius:8px;
+  background:rgba(255,250,242,.08);
+  backdrop-filter:blur(12px);
+}
+.center-panel h2{
+  color:var(--paper);
+  font:400 18px/.9 var(--display);
+  letter-spacing:0;
+  text-transform:uppercase;
+}
+.center-panel p{
+  margin-top:6px;
+  color:rgba(255,250,242,.72);
+  font:800 10px/1.25 var(--mono);
+  letter-spacing:.04em;
+}
+.receipt-drawer{
+  position:absolute;
+  left:16px;
+  right:16px;
+  bottom:112px;
+  z-index:29;
+  border:2px solid var(--paper);
+  border-radius:8px;
+  background:rgba(9,9,9,.86);
+  backdrop-filter:blur(16px);
+  box-shadow:0 16px 50px rgba(0,0,0,.45);
+  transform:translateY(calc(100% + 16px));
+  opacity:0;
+  pointer-events:none;
+  transition:transform .28s cubic-bezier(.2,.9,.18,1),opacity .2s ease;
+}
+.receipt-drawer.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.receipt-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 12px 10px;
+  border-bottom:1px solid rgba(255,250,242,.16);
+}
+.receipt-head b{font:400 18px/.9 var(--display);letter-spacing:0;text-transform:uppercase;color:var(--paper)}
+.receipt-head button{
+  border:0;
+  border-radius:8px;
+  background:var(--paper);
+  color:var(--ink);
+  padding:7px 9px;
+  font:900 10px/1 var(--mono);
+  cursor:pointer;
+}
+.receipt-list{max-height:182px;overflow:auto;padding:10px 12px 12px;display:grid;gap:8px;scrollbar-width:none}
+.receipt-list::-webkit-scrollbar{display:none}
+.receipt{
+  display:grid;
+  grid-template-columns:56px 1fr auto;
+  gap:9px;
+  align-items:center;
+  padding:9px;
+  border:1px solid rgba(255,250,242,.18);
+  border-radius:8px;
+  background:rgba(255,250,242,.07);
+}
+.receipt-side{
+  padding:8px 6px;
+  border-radius:8px;
+  color:var(--ink);
+  text-align:center;
+  font:400 14px/.85 var(--display);
+  text-transform:uppercase;
+}
+.receipt-side.back{background:var(--lime)}
+.receipt-side.fade{background:var(--red);color:var(--paper)}
+.receipt-main strong{display:block;font:900 13px/1.08 var(--body);color:var(--paper)}
+.receipt-main span{display:block;margin-top:4px;font:800 9px/1.2 var(--mono);letter-spacing:.04em;color:rgba(255,250,242,.65);text-transform:uppercase}
+.receipt-edge{font:400 19px/.9 var(--display);letter-spacing:0;color:var(--cyan)}
+.toast{
+  position:absolute;
+  left:18px;
+  right:18px;
+  top:112px;
+  z-index:35;
+  display:grid;
+  grid-template-columns:42px 1fr;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  border:2px solid var(--paper);
+  border-radius:8px;
+  background:rgba(9,9,9,.9);
+  color:var(--paper);
+  box-shadow:5px 5px 0 var(--cyan);
+  transform:translateY(-24px);
+  opacity:0;
+  pointer-events:none;
+  transition:transform .22s ease,opacity .22s ease;
+}
+.toast.show{transform:translateY(0);opacity:1}
+.toast-badge{
+  height:42px;
+  display:grid;
+  place-items:center;
+  border-radius:8px;
+  background:var(--lime);
+  color:var(--ink);
+  font:400 18px/.9 var(--display);
+}
+.toast strong{display:block;font:900 13px/1.1 var(--body)}
+.toast span{display:block;margin-top:4px;font:800 10px/1.2 var(--mono);color:rgba(255,250,242,.68);letter-spacing:.04em;text-transform:uppercase}
+.empty-state{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:28px;
+  text-align:center;
+}
+.empty-state h2{font:400 44px/.82 var(--display);text-transform:uppercase;color:var(--paper);letter-spacing:0}
+.empty-state p{margin-top:14px;font:800 13px/1.35 var(--mono);letter-spacing:.04em;color:rgba(255,250,242,.72);text-transform:uppercase}
+.empty-state button{
+  margin-top:22px;
+  height:50px;
+  padding:0 18px;
+  border:2px solid var(--paper);
+  border-radius:8px;
+  background:var(--lime);
+  color:var(--ink);
+  box-shadow:4px 4px 0 var(--red);
+  font:400 19px/.9 var(--display);
+  letter-spacing:0;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.create-chip{
+  position:absolute;
+  right:18px;
+  bottom:206px;
+  z-index:28;
+  width:54px;
+  height:54px;
+  border:2px solid var(--paper);
+  border-radius:8px;
+  background:var(--cyan);
+  color:var(--ink);
+  box-shadow:4px 4px 0 var(--red);
+  font:400 32px/.9 var(--display);
+  cursor:pointer;
+}
+@media (max-width:480px){
+  body{padding:0;display:block;overflow:hidden;background:#050505}
+  body::before,.device-meta{display:none}
+  .phone{width:100vw;height:100dvh;border:0;border-radius:0;box-shadow:none}
+  .phone::before{display:none}
+  .deck-shell{inset:94px 12px 104px}
+  .trend-name{font-size:40px;max-width:290px}
+  .trend-prompt{font-size:16px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="device-wrap">
+  <div class="device-meta">
+    <span>HIGH STREET</span>
+    <span class="meta-dot"></span>
+    <b>SWIPE MARKET</b>
+    <span>iPhone 14 - 390 x 844</span>
+  </div>
+
+  <main class="phone" aria-label="High Street swipe market prototype">
+    <div class="screen">
+      <div class="status">
+        <span>9:41</span>
+        <span class="status-right">5G  87%</span>
+      </div>
+
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-kicker">FI prediction feed</span>
+          <span class="brand-name">Back/Fade</span>
+        </div>
+        <div class="topbar-spacer"></div>
+        <div class="pill" id="bankroll">$500</div>
+        <div class="avatar">AM</div>
+      </header>
+
+      <button class="create-chip" type="button" id="createBtn" aria-label="Create a trend">+</button>
+
+      <section class="deck-shell" aria-live="polite">
+        <div class="deck" id="deck"></div>
+      </section>
+
+      <aside class="receipt-drawer" id="receiptDrawer" aria-label="Trend receipts">
+        <div class="receipt-head">
+          <b>Your Receipts</b>
+          <button type="button" id="closeReceipts">Close</button>
+        </div>
+        <div class="receipt-list" id="receiptList"></div>
+      </aside>
+
+      <div class="toast" id="toast" role="status" aria-live="polite">
+        <div class="toast-badge" id="toastBadge">YES</div>
+        <div>
+          <strong id="toastTitle">Receipt signed</strong>
+          <span id="toastBody">Backed at 62. Resolves in 30d.</span>
+        </div>
+      </div>
+
+      <nav class="action-rail" aria-label="Swipe controls">
+        <button class="action-btn fade" type="button" id="fadeBtn">
+          <strong>Fade</strong>
+          <span>Swipe left</span>
+        </button>
+        <button class="center-panel" type="button" id="receiptsBtn">
+          <h2>10 coin default</h2>
+          <p>Every swipe becomes a forecast receipt. Higher edge pays more if FI resolves your way.</p>
+        </button>
+        <button class="action-btn back" type="button" id="backBtn">
+          <strong>Back</strong>
+          <span>Swipe right</span>
+        </button>
+      </nav>
+    </div>
+  </main>
+</div>
+
+<script>
+const TRENDS = [
+  {
+    id:'ballet-sneakers',
+    name:'Ballet Sneakers',
+    prompt:'Will this gain FI relevance in the next 30 days?',
+    price:42,
+    fi:58,
+    velocity:'+31%',
+    resolves:'May 12',
+    heat:'EARLY',
+    image:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=900&h=1250&fit=crop&auto=format&q=82',
+    sources:['Pinterest pull','TikTok clips']
+  },
+  {
+    id:'office-siren',
+    name:'Office Siren',
+    prompt:'Will this still be rising after the next micro-cycle?',
+    price:64,
+    fi:71,
+    velocity:'+12%',
+    resolves:'May 19',
+    heat:'CROWDING',
+    image:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=900&h=1250&fit=crop&auto=format&q=82',
+    sources:['TikTok clips','Pinterest saves']
+  },
+  {
+    id:'sleek-moto',
+    name:'Sleek Moto',
+    prompt:'Will this outperform quiet luxury on FI velocity?',
+    price:37,
+    fi:44,
+    velocity:'+46%',
+    resolves:'May 26',
+    heat:'BREAKOUT',
+    image:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=900&h=1250&fit=crop&auto=format&q=82',
+    sources:['Pinterest pull','Runway boards']
+  },
+  {
+    id:'gorpcore-lite',
+    name:'Gorpcore Lite',
+    prompt:'Will this fade below 50 FI before June?',
+    price:57,
+    fi:62,
+    velocity:'-8%',
+    resolves:'Jun 2',
+    heat:'PEAK',
+    image:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=900&h=1250&fit=crop&auto=format&q=82',
+    sources:['TikTok clips','Pinterest saves']
+  },
+  {
+    id:'mesh-layering',
+    name:'Mesh Layering',
+    prompt:'Will this hit 70 FI relevance in 30 days?',
+    price:49,
+    fi:65,
+    velocity:'+22%',
+    resolves:'May 14',
+    heat:'RISING',
+    image:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=900&h=1250&fit=crop&auto=format&q=82',
+    sources:['Pinterest pull','TikTok clips']
+  }
+];
+
+let activeIndex = 0;
+let bankroll = 500;
+let receipts = [];
+let drag = null;
+
+const deck = document.getElementById('deck');
+const bankrollEl = document.getElementById('bankroll');
+const toast = document.getElementById('toast');
+const toastBadge = document.getElementById('toastBadge');
+const toastTitle = document.getElementById('toastTitle');
+const toastBody = document.getElementById('toastBody');
+const receiptDrawer = document.getElementById('receiptDrawer');
+const receiptList = document.getElementById('receiptList');
+
+function renderDeck(){
+  const visible = TRENDS.slice(activeIndex, activeIndex + 3);
+  if(!visible.length){
+    deck.innerHTML = `
+      <div class="empty-state">
+        <div>
+          <h2>Deck cleared</h2>
+          <p>You made ${receipts.length} calls. FI resolves the receipts later, but the prototype scores the market entry now.</p>
+          <button type="button" onclick="resetDeck()">Run it back</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  deck.innerHTML = visible.map((trend, i) => cardTemplate(trend, i)).reverse().join('');
+  const activeCard = deck.querySelector('.trend-card[data-order="0"]');
+  if(activeCard) bindDrag(activeCard);
+}
+
+function cardTemplate(trend, order){
+  const classes = order === 1 ? 'trend-card next' : order === 2 ? 'trend-card after' : 'trend-card';
+  return `
+    <article class="${classes}" data-order="${order}" data-id="${trend.id}">
+      <img src="${trend.image}" alt="${trend.name} trend moodboard" draggable="false">
+      <div class="swipe-stamp fade">Fade<small>buy no</small></div>
+      <div class="swipe-stamp back">Back<small>buy yes</small></div>
+      <div class="card-top">
+        <div class="source-stack">
+          ${trend.sources.map(source => `<span class="source ${source.toLowerCase().includes('tiktok') ? 'tiktok' : 'pin'}">${source}</span>`).join('')}
+        </div>
+        <div class="hotness">${trend.heat}</div>
+      </div>
+      <div class="card-copy">
+        <h1 class="trend-name">${trend.name}</h1>
+        <p class="trend-prompt">${trend.prompt}</p>
+      </div>
+      <div class="market-strip">
+        <div class="market-stat"><b>${trend.price}c</b><span>Back entry</span></div>
+        <div class="market-stat"><b>${trend.fi}</b><span>FI now</span></div>
+        <div class="market-stat"><b>${trend.velocity}</b><span>30d velocity</span></div>
+      </div>
+    </article>
+  `;
+}
+
+function bindDrag(card){
+  card.addEventListener('pointerdown', event => {
+    drag = {
+      card,
+      startX:event.clientX,
+      startY:event.clientY,
+      x:0,
+      y:0
+    };
+    card.setPointerCapture(event.pointerId);
+    card.style.transition = 'none';
+  });
+  card.addEventListener('pointermove', event => {
+    if(!drag || drag.card !== card) return;
+    drag.x = event.clientX - drag.startX;
+    drag.y = event.clientY - drag.startY;
+    updateCardPosition(card, drag.x, drag.y);
+  });
+  card.addEventListener('pointerup', event => releaseDrag(event));
+  card.addEventListener('pointercancel', event => releaseDrag(event));
+}
+
+function updateCardPosition(card, x, y){
+  const rotate = Math.max(-16, Math.min(16, x / 14));
+  const backOpacity = Math.max(0, Math.min(1, x / 120));
+  const fadeOpacity = Math.max(0, Math.min(1, -x / 120));
+  card.style.transform = `translate(${x}px, ${y}px) rotate(${rotate}deg)`;
+  card.querySelector('.swipe-stamp.back').style.opacity = backOpacity;
+  card.querySelector('.swipe-stamp.back').style.transform = `rotate(-10deg) scale(${.82 + backOpacity * .18})`;
+  card.querySelector('.swipe-stamp.fade').style.opacity = fadeOpacity;
+  card.querySelector('.swipe-stamp.fade').style.transform = `rotate(10deg) scale(${.82 + fadeOpacity * .18})`;
+}
+
+function releaseDrag(event){
+  if(!drag) return;
+  const {card, x, y} = drag;
+  drag = null;
+  try{ card.releasePointerCapture(event.pointerId); }catch(e){}
+  card.style.transition = '';
+  if(Math.abs(x) > 110){
+    submitSwipe(x > 0 ? 'back' : 'fade', card);
+  }else{
+    card.style.transform = '';
+    card.querySelector('.swipe-stamp.back').style.opacity = 0;
+    card.querySelector('.swipe-stamp.fade').style.opacity = 0;
+  }
+}
+
+function submitSwipe(side, card){
+  const trend = TRENDS[activeIndex];
+  const price = side === 'back' ? trend.price : 100 - trend.price;
+  const edge = Math.max(8, Math.round((100 - price) * (side === 'back' ? 1.4 : 1.15)));
+  const travel = side === 'back' ? 520 : -520;
+  bankroll -= 10;
+  receipts.unshift({side, trend:trend.name, price, edge, resolves:trend.resolves});
+  updateMarket(side, trend);
+  bankrollEl.textContent = `$${bankroll}`;
+
+  card.style.transform = `translate(${travel}px, -28px) rotate(${side === 'back' ? 19 : -19}deg)`;
+  card.style.opacity = 0;
+  showToast(side, trend.name, price, edge, trend.resolves);
+  renderReceipts();
+  activeIndex += 1;
+  setTimeout(renderDeck, 220);
+}
+
+function updateMarket(side, trend){
+  const move = side === 'back' ? 3 : -3;
+  trend.price = Math.max(8, Math.min(92, trend.price + move));
+}
+
+function showToast(side, name, price, edge, resolves){
+  toastBadge.textContent = side === 'back' ? 'YES' : 'NO';
+  toastBadge.style.background = side === 'back' ? 'var(--lime)' : 'var(--red)';
+  toastBadge.style.color = side === 'back' ? 'var(--ink)' : 'var(--paper)';
+  toastTitle.textContent = `${side === 'back' ? 'Backed' : 'Faded'} ${name}`;
+  toastBody.textContent = `Entry ${price}c - +${edge} edge if right - resolves ${resolves}`;
+  toast.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+function renderReceipts(){
+  if(!receipts.length){
+    receiptList.innerHTML = '<div class="receipt"><div class="receipt-main"><strong>No calls yet</strong><span>Swipe a trend to sign your first receipt.</span></div></div>';
+    return;
+  }
+  receiptList.innerHTML = receipts.map(item => `
+    <div class="receipt">
+      <div class="receipt-side ${item.side}">${item.side}</div>
+      <div class="receipt-main">
+        <strong>${item.trend}</strong>
+        <span>${item.price}c entry - resolves ${item.resolves}</span>
+      </div>
+      <div class="receipt-edge">+${item.edge}</div>
+    </div>
+  `).join('');
+}
+
+function resetDeck(){
+  activeIndex = 0;
+  bankroll = 500;
+  receipts = [];
+  TRENDS.forEach((trend, index) => {
+    trend.price = [42,64,37,57,49][index];
+  });
+  bankrollEl.textContent = '$500';
+  renderReceipts();
+  renderDeck();
+}
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  const card = deck.querySelector('.trend-card[data-order="0"]');
+  if(card) submitSwipe('back', card);
+});
+document.getElementById('fadeBtn').addEventListener('click', () => {
+  const card = deck.querySelector('.trend-card[data-order="0"]');
+  if(card) submitSwipe('fade', card);
+});
+document.getElementById('receiptsBtn').addEventListener('click', () => receiptDrawer.classList.toggle('open'));
+document.getElementById('closeReceipts').addEventListener('click', () => receiptDrawer.classList.remove('open'));
+document.getElementById('createBtn').addEventListener('click', () => {
+  showToast('back','creator trend seed',10,120,'after moderation');
+  toastTitle.textContent = 'Creator flow placeholder';
+  toastBody.textContent = 'Use FI image search here: TikTok/Pinterest pull -> moodboard -> market template.';
+});
+
+renderReceipts();
+renderDeck();
+</script>
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HIGH STREET — VERSUS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face{
+  font-family:'Titan One';
+  src:url('fonts/TitanOne-Regular.ttf') format('truetype');
+  font-weight:400;font-display:swap;
+}
+
+:root{
+  --white:#FFFFFF;
+  --black:#0A0A0A;
+  --off:#F5F3EF;
+  --warm:#E8DDD0;
+  --text-dim:rgba(255,255,255,.55);
+  --correct:#C8FF73;
+  --wrong:#FF6B6B;
+  --font:'Inter',system-ui,-apple-system,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:auto;overflow:hidden}
+body{
+  font-family:var(--font);
+  background:var(--black);color:var(--white);
+  overflow:hidden;height:100dvh;width:100vw;
+  position:fixed;inset:0;
+}
+
+/* ═══════════════════════════════════════════════
+   PHONE FRAME (desktop)
+   ═══════════════════════════════════════════════ */
+.device-wrap{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:#0A0A0A;
+}
+.device-label{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  font-family:var(--font);font-size:10px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);
+  z-index:9999;
+}
+.phone{
+  width:390px;height:844px;
+  background:var(--black);
+  border-radius:52px;
+  border:8px solid #1a1a1a;
+  box-shadow:
+    0 0 0 2px #2a2a2a,
+    0 60px 160px rgba(0,0,0,.8);
+  position:relative;overflow:hidden;
+}
+.phone::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:126px;height:30px;background:var(--black);
+  border-radius:0 0 18px 18px;z-index:9999;
+}
+
+@media (max-width:480px){
+  .device-label{display:none}
+  .phone{width:100vw;height:100dvh;border-radius:0;border:none;box-shadow:none}
+  .phone::before{display:none}
+}
+
+/* ═══════════════════════════════════════════════
+   SCREEN CONTAINER
+   ═══════════════════════════════════════════════ */
+.screen{
+  width:100%;height:100%;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+/* ═══════════════════════════════════════════════
+   TOP HUD — always visible
+   ═══════════════════════════════════════════════ */
+.hud{
+  position:absolute;top:0;left:0;right:0;z-index:100;
+  padding:52px 20px 0;
+  pointer-events:none;
+}
+.hud-row{
+  display:flex;justify-content:space-between;align-items:center;
+}
+.hud-logo{
+  font-family:'Titan One',system-ui,sans-serif;
+  font-size:16px;letter-spacing:.02em;color:var(--white);
+  opacity:.9;
+}
+.hud-stats{
+  display:flex;gap:16px;align-items:center;
+}
+.hud-stat{
+  font-size:11px;font-weight:600;letter-spacing:.06em;
+  color:rgba(255,255,255,.7);text-transform:uppercase;
+}
+.hud-stat b{color:var(--white);font-weight:800;font-size:13px}
+
+.hud-progress{
+  margin-top:12px;height:2px;background:rgba(255,255,255,.12);
+  border-radius:1px;overflow:hidden;
+}
+.hud-progress-bar{
+  height:100%;background:var(--white);
+  border-radius:1px;
+  transition:width .4s cubic-bezier(.16,1,.3,1);
+}
+
+/* ═══════════════════════════════════════════════
+   PAIR CONTAINER — the two halves
+   ═══════════════════════════════════════════════ */
+.pair-container{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  transition:transform .6s cubic-bezier(.16,1,.3,1), opacity .4s;
+}
+.pair-container.exit-up{
+  transform:translateY(-100%);opacity:0;
+}
+.pair-container.enter-below{
+  transform:translateY(60px);opacity:0;
+}
+
+.half{
+  flex:1;position:relative;overflow:hidden;cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+}
+.half:active .half-img{transform:scale(1.02)}
+
+.half-img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform .3s cubic-bezier(.16,1,.3,1);
+  will-change:transform;
+}
+
+/* dark gradient for text readability */
+.half::after{
+  content:'';position:absolute;inset:0;
+  pointer-events:none;
+}
+.half.top::after{
+  background:linear-gradient(180deg,
+    rgba(0,0,0,.45) 0%,
+    transparent 35%,
+    transparent 55%,
+    rgba(0,0,0,.7) 100%);
+}
+.half.bottom::after{
+  background:linear-gradient(0deg,
+    rgba(0,0,0,.5) 0%,
+    transparent 35%,
+    transparent 55%,
+    rgba(0,0,0,.65) 100%);
+}
+
+/* trend label */
+.half-label{
+  position:absolute;z-index:10;
+  left:20px;right:20px;
+  pointer-events:none;
+}
+.half.top .half-label{bottom:16px}
+.half.bottom .half-label{bottom:20px}
+
+.trend-name{
+  font-size:20px;font-weight:800;line-height:1.1;
+  letter-spacing:-.01em;color:var(--white);
+  text-transform:uppercase;
+  text-shadow:0 1px 8px rgba(0,0,0,.5);
+}
+.trend-sub{
+  font-size:10px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--text-dim);
+  margin-top:6px;
+}
+
+/* divider line between halves */
+.divider{
+  position:absolute;top:50%;left:0;right:0;z-index:50;
+  height:1px;background:rgba(255,255,255,.15);
+  transform:translateY(-50%);
+}
+.vs-badge{
+  position:absolute;top:50%;left:50%;z-index:60;
+  transform:translate(-50%,-50%);
+  width:36px;height:36px;
+  background:var(--black);border:1.5px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  color:rgba(255,255,255,.7);
+}
+
+/* prompt at top-center of bottom half */
+.prompt{
+  position:absolute;top:50%;left:50%;z-index:55;
+  transform:translate(-50%,24px);
+  font-size:10px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(255,255,255,.45);
+  white-space:nowrap;
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════════════
+   RESULT OVERLAY
+   ═══════════════════════════════════════════════ */
+.result-overlay{
+  position:absolute;inset:0;z-index:80;
+  display:flex;flex-direction:column;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .35s;
+}
+.result-overlay.show{opacity:1}
+
+.result-half{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;
+}
+.result-half::before{
+  content:'';position:absolute;inset:0;
+  transition:background .3s;
+}
+.result-half.winner::before{background:rgba(200,255,115,.12)}
+.result-half.loser::before{background:rgba(255,107,107,.08)}
+.result-half.picked::before{
+  border:2px solid var(--white);
+  margin:2px;border-radius:2px;
+}
+
+.result-badge{
+  position:relative;z-index:2;
+  padding:10px 20px;
+  border-radius:100px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+}
+.result-badge.correct{
+  background:rgba(200,255,115,.2);
+  border:1px solid rgba(200,255,115,.4);
+  color:var(--correct);
+}
+.result-badge.wrong{
+  background:rgba(255,107,107,.15);
+  border:1px solid rgba(255,107,107,.3);
+  color:var(--wrong);
+}
+.result-badge.answer{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  color:var(--white);
+}
+
+.result-fi{
+  position:relative;z-index:2;
+  margin-top:10px;
+  font-size:10px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,255,255,.5);
+}
+.result-fi b{color:var(--white);font-weight:800}
+
+/* ═══════════════════════════════════════════════
+   BOTTOM RESULT CARD — slides up after pick
+   ═══════════════════════════════════════════════ */
+.result-card{
+  position:absolute;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(10,10,10,.95);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  border-top:1px solid rgba(255,255,255,.1);
+  padding:28px 24px 44px;
+  transform:translateY(100%);
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+.result-card.show{transform:translateY(0)}
+
+.result-pct{
+  font-size:40px;font-weight:800;letter-spacing:-.02em;
+  line-height:1;margin-bottom:4px;
+}
+.result-pct.correct{color:var(--correct)}
+.result-pct.wrong{color:var(--wrong)}
+.result-card-sub{
+  font-size:13px;font-weight:600;color:rgba(255,255,255,.5);
+  margin-bottom:20px;line-height:1.4;
+}
+.result-card-sub b{color:var(--white);font-weight:700}
+
+.result-continue{
+  margin-top:18px;
+  text-align:center;
+  font-size:10px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.25);
+  animation:fadePulse 2s ease-in-out infinite;
+}
+@keyframes fadePulse{0%,100%{opacity:.25}50%{opacity:.6}}
+
+.result-card-top{
+  display:flex;align-items:center;gap:12px;margin-bottom:14px;
+}
+.result-emoji{font-size:28px;line-height:1}
+.result-headline{
+  font-size:15px;font-weight:700;line-height:1.3;
+  color:var(--white);
+}
+.result-headline span{font-weight:400;color:rgba(255,255,255,.5)}
+
+.result-bar-wrap{margin-bottom:16px}
+.result-bar-labels{
+  display:flex;justify-content:space-between;
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(255,255,255,.4);
+  margin-bottom:6px;
+}
+.result-bar-labels .picked-label{color:var(--white)}
+.result-bar{
+  height:6px;background:rgba(255,255,255,.08);
+  border-radius:3px;overflow:hidden;
+  display:flex;
+}
+.result-bar-fill{
+  height:100%;border-radius:3px;
+  transition:width .8s cubic-bezier(.16,1,.3,1) .3s;
+}
+.result-bar-fill.a{background:var(--white)}
+.result-bar-fill.b{background:rgba(255,255,255,.25)}
+
+.result-meta{
+  display:flex;gap:20px;
+  font-size:11px;font-weight:600;color:rgba(255,255,255,.4);
+  letter-spacing:.04em;
+}
+.result-meta b{color:var(--white);font-weight:800}
+.result-meta .up{color:var(--correct)}
+.result-meta .down{color:var(--wrong)}
+
+/* ═══════════════════════════════════════════════
+   SPLASH / ONBOARDING
+   ═══════════════════════════════════════════════ */
+#splash{
+  position:absolute;inset:0;z-index:200;
+  background:var(--black);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 32px;
+  transition:opacity .5s, transform .5s;
+}
+#splash.exit{opacity:0;transform:scale(1.03);pointer-events:none}
+
+.splash-eyebrow{
+  font-size:10px;font-weight:600;letter-spacing:.24em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);
+  margin-bottom:24px;
+}
+.splash-title{
+  font-family:'Titan One',system-ui,sans-serif;
+  font-size:52px;line-height:.9;text-align:center;
+  color:var(--white);letter-spacing:.01em;
+}
+.splash-desc{
+  font-size:14px;font-weight:500;line-height:1.6;
+  color:rgba(255,255,255,.5);text-align:center;
+  margin-top:18px;max-width:280px;
+}
+.splash-desc b{color:var(--white);font-weight:700}
+.splash-start{
+  margin-top:40px;
+  width:100%;max-width:260px;
+  padding:16px;
+  border:none;border-radius:0;
+  background:var(--white);color:var(--black);
+  font-family:var(--font);font-size:13px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .2s;
+}
+.splash-start:active{opacity:.7}
+.splash-how{
+  margin-top:20px;
+  font-size:11px;font-weight:500;color:rgba(255,255,255,.25);
+  letter-spacing:.08em;text-transform:uppercase;
+}
+
+/* ═══════════════════════════════════════════════
+   LEADERBOARD PEEK — swipe up to reveal
+   ═══════════════════════════════════════════════ */
+.lb-peek{
+  position:absolute;bottom:0;left:0;right:0;z-index:95;
+  pointer-events:none;opacity:0;
+  transition:opacity .3s;
+}
+.lb-peek.show{opacity:1}
+.lb-peek-pill{
+  margin:0 auto 8px;width:40px;height:4px;
+  background:rgba(255,255,255,.2);border-radius:2px;
+}
+</style>
+</head>
+<body>
+
+<div class="device-wrap">
+  <span class="device-label">HIGH STREET — VERSUS PROTOTYPE</span>
+  <div class="phone">
+    <div class="screen" id="screen">
+
+      <!-- SPLASH -->
+      <div id="splash">
+        <div class="splash-eyebrow">HIGH STREET</div>
+        <h1 class="splash-title">WHICH<br>IS<br>HOTTER?</h1>
+        <p class="splash-desc">Two trends. One answer.<br>Tap the one that's <b>more relevant right now.</b><br>We'll tell you if you're right.</p>
+        <button class="splash-start" onclick="startGame(event)">START PLAYING</button>
+        <div class="splash-how">Powered by FI Intelligence</div>
+      </div>
+
+      <!-- HUD -->
+      <div class="hud" id="hud" style="opacity:0">
+        <div class="hud-row">
+          <div class="hud-logo">HIGH STREET</div>
+          <div class="hud-stats">
+            <div class="hud-stat"><b id="hud-correct">0</b> / <span id="hud-total">0</span></div>
+            <div class="hud-stat"><b id="hud-acc">-%</b></div>
+            <div class="hud-stat" id="hud-streak" style="display:none">🔥 <b id="hud-streak-n">0</b></div>
+          </div>
+        </div>
+        <div class="hud-progress">
+          <div class="hud-progress-bar" id="hud-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- PAIR (rendered by JS) -->
+      <div id="pair-area"></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// TREND DATA — FI scores determine the "answer"
+// Replace images with real FI moodboards later
+// ═══════════════════════════════════════════════
+const TRENDS = [
+  {
+    name:'Sculpted Cocoon Coats',
+    sub:'Sculptural wool, belted, dropped shoulders',
+    fi:0.0272,
+    img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=900&fit=crop&crop=faces'
+  },
+  {
+    name:'Boxy Power Suits',
+    sub:'Double-breasted, padded shoulders, earth tones',
+    fi:0.0239,
+    img:'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Baroque Cropped Glam',
+    sub:'Embellished crop tops, ornate details',
+    fi:0.0285,
+    img:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Minimalist Maxi Coats',
+    sub:'A-line wool maxi, solid black, matte',
+    fi:0.0297,
+    img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Silver Draped Mini',
+    sub:'Asymmetric metallic draping, party-ready',
+    fi:0.0263,
+    img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Cargo Revival',
+    sub:'Baggy utility cargo, washed fabrics',
+    fi:0.0198,
+    img:'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Sheer Layering',
+    sub:'Translucent fabrics, layered evening looks',
+    fi:0.0312,
+    img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Old Money Equestrian',
+    sub:'Riding boots, tweed, heritage prep',
+    fi:0.0167,
+    img:'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Metallic Tailoring',
+    sub:'Aristocratic shimmer, structured blazers',
+    fi:0.0251,
+    img:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Indie Sleaze Revival',
+    sub:'Grunge-glam, messy hair, leather',
+    fi:0.0183,
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Fuchsia Palazzo',
+    sub:'Wide-leg, saturated pink, statement dressing',
+    fi:0.0274,
+    img:'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Oversized Denim',
+    sub:'Wide, washed, vintage-inspired silhouettes',
+    fi:0.0221,
+    img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=900&fit=crop'
+  },
+];
+
+// ═══════════════════════════════════════════════
+// GAME STATE
+// ═══════════════════════════════════════════════
+let state = {
+  correct: 0,
+  total: 0,
+  streak: 0,
+  bestStreak: 0,
+  pairs: [],
+  currentPair: 0,
+  locked: false,
+};
+
+// Generate pairs — ensure decent score gap + no repeats adjacent
+function generatePairs(){
+  const pairs = [];
+  const shuffled = [...TRENDS].sort(() => Math.random() - .5);
+  // generate all valid pairs with min gap
+  const valid = [];
+  for(let i=0;i<TRENDS.length;i++){
+    for(let j=i+1;j<TRENDS.length;j++){
+      const gap = Math.abs(TRENDS[i].fi - TRENDS[j].fi);
+      if(gap >= 0.004) valid.push([TRENDS[i], TRENDS[j]]);
+    }
+  }
+  // shuffle and pick
+  valid.sort(() => Math.random() - .5);
+  return valid.slice(0, 20); // 20 pairs per session
+}
+
+// ═══════════════════════════════════════════════
+// RENDER PAIR
+// ═══════════════════════════════════════════════
+function renderPair(idx){
+  if(idx >= state.pairs.length) idx = 0; // loop
+  state.currentPair = idx;
+  state.locked = false;
+
+  const [a, b] = state.pairs[idx];
+  // randomize top/bottom
+  const flip = Math.random() > .5;
+  const top = flip ? a : b;
+  const bot = flip ? b : a;
+
+  const area = document.getElementById('pair-area');
+  const existing = area.querySelector('.pair-container');
+
+  const el = document.createElement('div');
+  el.className = 'pair-container enter-below';
+  el.innerHTML = `
+    <div class="half top" data-fi="${top.fi}" data-name="${top.name}" onclick="pick(this)">
+      <div class="half-img" style="background-image:url('${top.img}')"></div>
+      <div class="half-label">
+        <div class="trend-name">${top.name}</div>
+        <div class="trend-sub">${top.sub}</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="vs-badge">VS</div>
+    <div class="prompt">TAP THE HOTTER TREND</div>
+    <div class="half bottom" data-fi="${bot.fi}" data-name="${bot.name}" onclick="pick(this)">
+      <div class="half-img" style="background-image:url('${bot.img}')"></div>
+      <div class="half-label">
+        <div class="trend-name">${bot.name}</div>
+        <div class="trend-sub">${bot.sub}</div>
+      </div>
+    </div>
+    <div class="result-overlay" id="ro-${idx}">
+      <div class="result-half top" id="rh-top-${idx}"></div>
+      <div class="result-half bottom" id="rh-bot-${idx}"></div>
+    </div>
+    <div class="result-card" id="rc-${idx}"></div>
+  `;
+
+  area.appendChild(el);
+
+  // animate in
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      el.classList.remove('enter-below');
+      if(existing){
+        existing.classList.add('exit-up');
+        setTimeout(() => existing.remove(), 700);
+      }
+    });
+  });
+}
+
+// ═══════════════════════════════════════════════
+// PICK — user taps a side
+// ═══════════════════════════════════════════════
+function pick(halfEl){
+  if(state.locked) return;
+  state.locked = true;
+  state.total++;
+
+  const pair = state.pairs[state.currentPair];
+  const [a, b] = pair;
+  const pickedFi = parseFloat(halfEl.dataset.fi);
+  const pickedName = halfEl.dataset.name;
+
+  // determine winner (higher FI score)
+  const winner = a.fi > b.fi ? a : b;
+  const loser = a.fi > b.fi ? b : a;
+  const isCorrect = pickedFi === winner.fi;
+
+  if(isCorrect){
+    state.correct++;
+    state.streak++;
+    if(state.streak > state.bestStreak) state.bestStreak = state.streak;
+  } else {
+    state.streak = 0;
+  }
+
+  // fake crowd percentages (weighted toward correct answer)
+  const correctPct = Math.round(35 + Math.random() * 45); // 35-80%
+  const wrongPct = 100 - correctPct;
+  const userPct = isCorrect ? correctPct : wrongPct;
+
+  // update HUD
+  updateHud();
+
+  // show result
+  const idx = state.currentPair;
+  const ro = document.getElementById(`ro-${idx}`);
+  const rc = document.getElementById(`rc-${idx}`);
+
+  // find top and bottom halves
+  const container = halfEl.closest('.pair-container');
+  const topHalf = container.querySelector('.half.top');
+  const botHalf = container.querySelector('.half.bottom');
+  const topFi = parseFloat(topHalf.dataset.fi);
+  const botFi = parseFloat(botHalf.dataset.fi);
+  const topIsWinner = topFi > botFi;
+  const topIsPicked = topHalf === halfEl;
+  const botIsPicked = botHalf === halfEl;
+
+  // result overlay halves
+  const rhTop = document.getElementById(`rh-top-${idx}`);
+  const rhBot = document.getElementById(`rh-bot-${idx}`);
+  rhTop.className = `result-half top ${topIsWinner?'winner':'loser'} ${topIsPicked?'picked':''}`;
+  rhBot.className = `result-half bottom ${!topIsWinner?'winner':'loser'} ${botIsPicked?'picked':''}`;
+
+  // badges
+  if(topIsPicked && isCorrect){
+    rhTop.innerHTML = `<div class="result-badge correct">✓ YOUR PICK — CORRECT</div><div class="result-fi">FI Score: <b>${topFi.toFixed(4)}</b></div>`;
+    rhBot.innerHTML = `<div class="result-badge answer">FI Score: ${botFi.toFixed(4)}</div>`;
+  } else if(topIsPicked && !isCorrect){
+    rhTop.innerHTML = `<div class="result-badge wrong">✗ YOUR PICK</div><div class="result-fi">FI Score: <b>${topFi.toFixed(4)}</b></div>`;
+    rhBot.innerHTML = `<div class="result-badge correct">✓ CORRECT ANSWER</div><div class="result-fi">FI Score: <b>${botFi.toFixed(4)}</b></div>`;
+  } else if(botIsPicked && isCorrect){
+    rhBot.innerHTML = `<div class="result-badge correct">✓ YOUR PICK — CORRECT</div><div class="result-fi">FI Score: <b>${botFi.toFixed(4)}</b></div>`;
+    rhTop.innerHTML = `<div class="result-badge answer">FI Score: ${topFi.toFixed(4)}</div>`;
+  } else {
+    rhBot.innerHTML = `<div class="result-badge wrong">✗ YOUR PICK</div><div class="result-fi">FI Score: <b>${botFi.toFixed(4)}</b></div>`;
+    rhTop.innerHTML = `<div class="result-badge correct">✓ CORRECT ANSWER</div><div class="result-fi">FI Score: <b>${topFi.toFixed(4)}</b></div>`;
+  }
+
+  ro.classList.add('show');
+
+  // result card — build dynamically for new layout
+  const acc = state.total > 0 ? Math.round(state.correct / state.total * 100) : 0;
+
+  const winnerName = winner.name.toUpperCase();
+  const loserName = loser.name.toUpperCase();
+
+  let pctClass = isCorrect ? 'correct' : 'wrong';
+  let pctText, subText;
+
+  if(isCorrect && userPct <= 25){
+    pctText = `TOP ${userPct}%`;
+    subText = `You were in the <b>${userPct}%</b> that got this right. Most people missed it.`;
+  } else if(isCorrect && userPct <= 50){
+    pctText = `${userPct}%`;
+    subText = `You were in the <b>${userPct}%</b> that got it right.`;
+  } else if(isCorrect){
+    pctText = `CORRECT`;
+    subText = `<b>${userPct}%</b> of players agree with you. ${winner.name} is hotter right now.`;
+  } else if(!isCorrect && userPct >= 60){
+    pctText = `${userPct}%`;
+    subText = `You were in the <b>${userPct}%</b> that got it wrong. The crowd missed this one too.`;
+  } else {
+    pctText = `WRONG`;
+    subText = `<b>${correctPct}%</b> of players got this right. <b>${winner.name}</b> is hotter right now.`;
+  }
+
+  rc.innerHTML = `
+    <div class="result-pct ${pctClass}">${pctText}</div>
+    <div class="result-card-sub">${subText}</div>
+    <div class="result-bar-wrap">
+      <div class="result-bar-labels">
+        <span class="${pickedName===winner.name?'picked-label':''}">${winnerName} ${correctPct}%</span>
+        <span class="${pickedName===loser.name?'picked-label':''}">${loserName} ${wrongPct}%</span>
+      </div>
+      <div class="result-bar">
+        <div class="result-bar-fill a" id="rc-bara-${idx}" style="width:0%"></div>
+        <div class="result-bar-fill b" id="rc-barb-${idx}" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="result-meta">
+      <span>Accuracy: <b>${acc}%</b></span>
+      <span>Streak: <b class="${state.streak>0?'up':''}">${state.streak} 🔥</b></span>
+      <span>Played: <b>${state.total}</b></span>
+    </div>
+    <div class="result-continue">TAP ANYWHERE TO CONTINUE</div>
+  `;
+
+  // animate card in
+  setTimeout(() => {
+    rc.classList.add('show');
+    document.getElementById(`rc-bara-${idx}`).style.width = correctPct + '%';
+    document.getElementById(`rc-barb-${idx}`).style.width = wrongPct + '%';
+  }, 450);
+
+  // tap anywhere on the pair container to advance
+  setTimeout(() => {
+    const container = halfEl.closest('.pair-container');
+    if(!container) return;
+    const handler = (e) => {
+      e.stopPropagation();
+      container.removeEventListener('click', handler);
+      renderPair(state.currentPair + 1);
+    };
+    container.addEventListener('click', handler);
+    // also allow tap on the result card itself
+    rc.addEventListener('click', (e) => {
+      e.stopPropagation();
+      container.removeEventListener('click', handler);
+      renderPair(state.currentPair + 1);
+    }, {once:true});
+  }, 800);
+}
+
+// ═══════════════════════════════════════════════
+// HUD
+// ═══════════════════════════════════════════════
+function updateHud(){
+  document.getElementById('hud-correct').textContent = state.correct;
+  document.getElementById('hud-total').textContent = state.total;
+  const acc = state.total > 0 ? Math.round(state.correct / state.total * 100) : 0;
+  document.getElementById('hud-acc').textContent = acc + '%';
+  const streakEl = document.getElementById('hud-streak');
+  if(state.streak >= 2){
+    streakEl.style.display = 'block';
+    document.getElementById('hud-streak-n').textContent = state.streak;
+  } else {
+    streakEl.style.display = 'none';
+  }
+  // progress bar — loops every 20
+  const pct = ((state.total % 20) / 20) * 100;
+  document.getElementById('hud-bar').style.width = pct + '%';
+}
+
+// ═══════════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════════
+function startGame(e){
+  if(e) e.stopPropagation();
+  const sp = document.getElementById('splash');
+  sp.classList.add('exit');
+  setTimeout(() => {
+    sp.style.display = 'none';
+    document.getElementById('hud').style.opacity = '1';
+    state.pairs = generatePairs();
+    renderPair(0);
+  }, 500);
+}
+</script>
+</body>
+</html>

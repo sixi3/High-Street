@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>HIGH STREET — SCOUT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{
+  font-family:'Boska';
+  src:url('fonts/Boska-Variable.ttf') format('truetype');
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:'Boska';
+  src:url('fonts/Boska-VariableItalic.ttf') format('truetype');
+  font-weight:100 900;
+  font-style:italic;
+  font-display:swap;
+}
+
+:root{
+  --white:#FFFFFF;
+  --black:#0A0A0A;
+  --cream:#F8F6F2;
+  --stone:#E8E4DE;
+  --warm:#C4BCB0;
+  --dim:rgba(10,10,10,.4);
+  --dim-light:rgba(10,10,10,.2);
+  --accent:#1A1A1A;
+  --green:#2D6A4F;
+  --green-light:#D4EDDA;
+  --red:#8B1A1A;
+  --red-light:#F5D5D5;
+  --early:#5B4FCF;
+  --growth:#2D6A4F;
+  --peak:#B8860B;
+  --decline:#8B1A1A;
+  --serif:'Boska','Georgia','Times New Roman',serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:auto;overflow:hidden}
+body{
+  font-family:var(--sans);
+  background:var(--black);color:var(--black);
+  overflow:hidden;height:100dvh;width:100vw;
+  position:fixed;inset:0;
+}
+
+/* ═══════════════════════════════════════════
+   PHONE FRAME
+   ═══════════════════════════════════════════ */
+.device-wrap{
+  position:fixed;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  background:#0A0A0A;
+}
+.device-label{
+  position:fixed;top:24px;left:50%;transform:translateX(-50%);
+  font-family:var(--sans);font-size:10px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.3);
+  z-index:9999;
+}
+.phone{
+  width:390px;height:844px;
+  background:var(--cream);
+  border-radius:52px;
+  border:8px solid #1a1a1a;
+  box-shadow:0 0 0 2px #2a2a2a,0 60px 160px rgba(0,0,0,.8);
+  position:relative;overflow:hidden;
+}
+.phone::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:126px;height:30px;background:var(--black);
+  border-radius:0 0 18px 18px;z-index:9999;
+}
+
+@media(max-width:480px){
+  .device-label{display:none}
+  .phone{width:100vw;height:100dvh;border-radius:0;border:none;box-shadow:none}
+  .phone::before{display:none}
+}
+
+/* ═══════════════════════════════════════════
+   SCREEN
+   ═══════════════════════════════════════════ */
+.screen{
+  width:100%;height:100%;position:relative;overflow:hidden;
+}
+
+.view{
+  position:absolute;inset:0;
+  overflow-y:auto;overflow-x:hidden;
+  transition:opacity .5s,transform .5s cubic-bezier(.16,1,.3,1);
+  -webkit-overflow-scrolling:touch;
+}
+.view.hidden{
+  opacity:0;pointer-events:none;transform:translateX(30%);
+}
+.view.hidden-left{
+  opacity:0;pointer-events:none;transform:translateX(-30%);
+}
+.view.hidden-fade{
+  opacity:0;pointer-events:none;transform:scale(1.02);
+}
+
+/* ═══════════════════════════════════════════
+   SPLASH
+   ═══════════════════════════════════════════ */
+#splash{
+  background:var(--black);color:var(--white);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 32px;
+  z-index:200;
+}
+.splash-brand{
+  font-family:var(--sans);font-size:9px;font-weight:600;
+  letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);margin-bottom:48px;
+}
+.splash-title{
+  font-family:var(--serif);font-weight:500;
+  font-size:72px;line-height:.88;text-align:center;
+  color:var(--white);letter-spacing:-.02em;
+}
+.splash-title em{
+  font-style:italic;font-weight:300;
+  display:block;font-size:64px;
+  color:rgba(255,255,255,.7);
+}
+.splash-desc{
+  font-size:13px;font-weight:400;line-height:1.7;
+  color:rgba(255,255,255,.45);text-align:center;
+  margin-top:28px;max-width:260px;
+  letter-spacing:.01em;
+}
+.splash-start{
+  margin-top:48px;
+  width:100%;max-width:240px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:0;background:transparent;
+  color:var(--white);
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  letter-spacing:.25em;text-transform:uppercase;
+  cursor:pointer;transition:all .3s;
+}
+.splash-start:hover{background:var(--white);color:var(--black)}
+.splash-start:active{opacity:.7}
+.splash-line{
+  width:40px;height:1px;background:rgba(255,255,255,.15);
+  margin:36px auto 0;
+}
+.splash-fi{
+  margin-top:16px;
+  font-size:9px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(255,255,255,.2);
+}
+
+/* ═══════════════════════════════════════════
+   TOP NAV BAR
+   ═══════════════════════════════════════════ */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(248,246,242,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  padding:52px 20px 0;
+}
+.nav-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding-bottom:14px;
+}
+.nav-logo{
+  font-family:var(--serif);font-weight:500;
+  font-size:22px;letter-spacing:-.01em;color:var(--black);
+}
+.nav-actions{display:flex;gap:16px;align-items:center}
+.nav-credits{
+  font-size:10px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--black);
+  padding:6px 12px;border:1px solid var(--black);
+}
+.nav-icon{
+  width:20px;height:20px;opacity:.5;cursor:pointer;
+  transition:opacity .2s;
+}
+.nav-icon:hover{opacity:1}
+
+.nav-tabs{
+  display:flex;gap:0;border-bottom:1px solid rgba(0,0,0,.08);
+}
+.nav-tab{
+  flex:1;text-align:center;
+  padding:10px 0;
+  font-size:10px;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--dim);
+  cursor:pointer;transition:all .2s;
+  border-bottom:1.5px solid transparent;
+  margin-bottom:-1px;
+}
+.nav-tab.active{
+  color:var(--black);
+  border-bottom-color:var(--black);
+}
+
+/* ═══════════════════════════════════════════
+   DAILY DROP BANNER
+   ═══════════════════════════════════════════ */
+.drop-banner{
+  margin:16px 20px 0;
+  padding:14px 16px;
+  background:var(--black);color:var(--white);
+  display:flex;align-items:center;gap:12px;
+}
+.drop-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:#5B4FCF;
+  animation:dropPulse 2s ease-in-out infinite;
+}
+@keyframes dropPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.drop-text{flex:1}
+.drop-label{
+  font-size:10px;font-weight:700;letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.drop-sub{
+  font-size:10px;font-weight:400;color:rgba(255,255,255,.5);
+  margin-top:2px;
+}
+.drop-time{
+  font-size:18px;font-weight:300;
+  font-family:var(--serif);
+  color:rgba(255,255,255,.6);
+}
+
+/* ═══════════════════════════════════════════
+   FEED — TREND CARDS
+   ═══════════════════════════════════════════ */
+.feed{padding:8px 0 120px}
+
+.trend-card{
+  margin:12px 20px;
+  background:var(--white);
+  cursor:pointer;
+  transition:transform .2s;
+}
+.trend-card:active{transform:scale(.98)}
+
+.trend-card-img{
+  width:100%;aspect-ratio:3/4;
+  object-fit:cover;display:block;
+  filter:grayscale(10%);
+}
+
+.trend-card-body{padding:16px 16px 18px}
+
+.trend-card-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:8px;
+}
+.trend-card-name{
+  font-family:var(--serif);font-weight:500;
+  font-size:20px;line-height:1.15;letter-spacing:-.01em;
+  color:var(--black);flex:1;padding-right:12px;
+}
+.trend-card-lifecycle{
+  font-size:9px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 8px;
+  white-space:nowrap;margin-top:3px;
+}
+.lifecycle-early{background:#EDE9FF;color:var(--early)}
+.lifecycle-growth{background:var(--green-light);color:var(--growth)}
+.lifecycle-peak{background:#FFF3CD;color:var(--peak)}
+.lifecycle-decline{background:var(--red-light);color:var(--decline)}
+
+.trend-card-sub{
+  font-size:11px;font-weight:400;color:var(--dim);
+  line-height:1.5;margin-bottom:14px;
+}
+
+.trend-card-data{
+  display:flex;gap:20px;align-items:center;
+  padding-top:14px;
+  border-top:1px solid rgba(0,0,0,.06);
+}
+.trend-datum{
+  display:flex;flex-direction:column;gap:2px;
+}
+.trend-datum-label{
+  font-size:8px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim-light);
+}
+.trend-datum-val{
+  font-size:14px;font-weight:600;letter-spacing:-.01em;
+  color:var(--black);
+}
+.trend-datum-val.up{color:var(--growth)}
+.trend-datum-val.down{color:var(--red)}
+
+.trend-card-sparkline{
+  margin-left:auto;
+  width:60px;height:24px;
+}
+
+/* ═══════════════════════════════════════════
+   TREND DETAIL VIEW
+   ═══════════════════════════════════════════ */
+#detail{
+  background:var(--white);
+  z-index:150;
+}
+.detail-close{
+  position:fixed;top:52px;right:28px;z-index:160;
+  width:36px;height:36px;
+  background:rgba(248,246,242,.9);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border:none;border-radius:50%;
+  font-size:16px;color:var(--black);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:opacity .2s;
+}
+.detail-close:active{opacity:.5}
+
+.detail-hero{
+  width:100%;aspect-ratio:3/5;
+  object-fit:cover;display:block;
+}
+.detail-body{
+  padding:24px 20px 140px;
+}
+.detail-eyebrow{
+  font-size:9px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:12px;
+  display:flex;align-items:center;gap:8px;
+}
+.detail-eyebrow-dot{
+  width:6px;height:6px;border-radius:50%;
+}
+.detail-title{
+  font-family:var(--serif);font-weight:500;
+  font-size:36px;line-height:1.05;letter-spacing:-.02em;
+  color:var(--black);margin-bottom:8px;
+}
+.detail-subtitle{
+  font-size:13px;font-weight:400;color:var(--dim);
+  line-height:1.6;margin-bottom:28px;
+}
+
+.detail-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:1px;
+  background:rgba(0,0,0,.06);
+  margin-bottom:28px;
+}
+.detail-stat{
+  background:var(--white);padding:16px;
+}
+.detail-stat-label{
+  font-size:8px;font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--dim-light);
+  margin-bottom:6px;
+}
+.detail-stat-val{
+  font-size:22px;font-weight:600;letter-spacing:-.01em;
+  color:var(--black);
+}
+.detail-stat-val.up{color:var(--growth)}
+.detail-stat-val.down{color:var(--red)}
+
+.detail-chart{
+  height:120px;margin-bottom:28px;
+  background:var(--cream);
+  display:flex;align-items:flex-end;
+  padding:16px;gap:3px;
+  position:relative;
+}
+.detail-chart-bar{
+  flex:1;background:var(--stone);
+  border-radius:1px 1px 0 0;
+  transition:height .6s cubic-bezier(.16,1,.3,1);
+  min-height:4px;
+}
+.detail-chart-bar.current{background:var(--black)}
+.detail-chart-label{
+  position:absolute;bottom:4px;right:16px;
+  font-size:8px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim-light);
+}
+
+.detail-section-title{
+  font-size:9px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim-light);
+  margin-bottom:16px;
+}
+.detail-signals{
+  display:flex;flex-direction:column;gap:10px;
+  margin-bottom:32px;
+}
+.detail-signal{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid rgba(0,0,0,.04);
+}
+.detail-signal-name{
+  font-size:12px;font-weight:500;color:var(--black);
+}
+.detail-signal-bar-wrap{
+  width:80px;height:3px;background:rgba(0,0,0,.06);
+  border-radius:2px;overflow:hidden;
+}
+.detail-signal-bar{
+  height:100%;background:var(--black);border-radius:2px;
+  transition:width .8s cubic-bezier(.16,1,.3,1);
+}
+
+/* Scout Button */
+.scout-btn-wrap{
+  position:fixed;bottom:0;left:0;right:0;z-index:250;
+  padding:0 20px 36px;
+  background:linear-gradient(0deg,rgba(255,255,255,1) 60%,rgba(255,255,255,0));
+  pointer-events:none;
+}
+.scout-btn{
+  width:100%;padding:18px;
+  border:none;border-radius:0;
+  background:var(--black);color:var(--white);
+  font-family:var(--sans);font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;pointer-events:all;
+  transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.scout-btn:active{opacity:.7;transform:scale(.98)}
+.scout-btn .price{
+  font-weight:400;opacity:.5;
+}
+.scout-btn.scouted{
+  background:var(--green);
+}
+
+/* ═══════════════════════════════════════════
+   BOARD VIEW
+   ═══════════════════════════════════════════ */
+#board{
+  background:var(--cream);
+  z-index:120;
+}
+.board-header{
+  padding:52px 20px 0;
+  background:rgba(248,246,242,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  position:sticky;top:0;z-index:10;
+}
+.board-back{
+  font-size:12px;font-weight:500;color:var(--dim);
+  cursor:pointer;padding:8px 0;
+  border:none;background:none;
+  font-family:var(--sans);letter-spacing:.04em;
+}
+.board-back:active{opacity:.5}
+.board-title-row{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:12px 0 16px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.board-title{
+  font-family:var(--serif);font-weight:500;
+  font-size:28px;letter-spacing:-.01em;color:var(--black);
+}
+.board-pnl{
+  font-size:22px;font-weight:600;letter-spacing:-.01em;
+}
+.board-pnl.up{color:var(--growth)}
+.board-pnl.down{color:var(--red)}
+
+.board-meta{
+  display:flex;gap:20px;
+  padding:14px 20px;
+  font-size:10px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--dim);
+}
+.board-meta b{color:var(--black);font-weight:700}
+
+.board-items{padding:0 20px 40px}
+
+.board-item{
+  display:flex;gap:14px;
+  padding:16px 0;
+  border-bottom:1px solid rgba(0,0,0,.06);
+  align-items:center;
+}
+.board-item-img{
+  width:56px;height:72px;object-fit:cover;flex-shrink:0;
+}
+.board-item-info{flex:1;min-width:0}
+.board-item-name{
+  font-family:var(--serif);font-weight:500;
+  font-size:15px;line-height:1.2;color:var(--black);
+  margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.board-item-lifecycle{
+  font-size:8px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;
+  display:inline-block;
+  padding:2px 6px;margin-bottom:4px;
+}
+.board-item-entry{
+  font-size:10px;font-weight:500;color:var(--dim);
+}
+.board-item-pnl{
+  font-size:16px;font-weight:700;letter-spacing:-.01em;
+  text-align:right;white-space:nowrap;
+}
+.board-item-pnl.up{color:var(--growth)}
+.board-item-pnl.down{color:var(--red)}
+
+/* Share button */
+.board-share-wrap{padding:8px 20px 120px}
+.board-share{
+  width:100%;padding:16px;
+  border:1px solid var(--black);
+  border-radius:0;background:transparent;
+  color:var(--black);
+  font-family:var(--sans);font-size:10px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;
+  cursor:pointer;transition:all .2s;
+}
+.board-share:hover{background:var(--black);color:var(--white)}
+.board-share:active{opacity:.7}
+
+/* ═══════════════════════════════════════════
+   SHARE CARD OVERLAY
+   ═══════════════════════════════════════════ */
+#share-overlay{
+  position:absolute;inset:0;z-index:300;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(30px);
+  -webkit-backdrop-filter:blur(30px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:40px 28px;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s;
+}
+#share-overlay.show{opacity:1;pointer-events:all}
+
+.share-card{
+  width:100%;max-width:320px;
+  background:var(--black);color:var(--white);
+  padding:32px 24px;
+}
+.share-card-brand{
+  font-size:9px;font-weight:600;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(255,255,255,.35);
+  margin-bottom:24px;
+}
+.share-card-title{
+  font-family:var(--serif);font-weight:500;
+  font-size:28px;line-height:1.05;letter-spacing:-.01em;
+  margin-bottom:4px;
+}
+.share-card-author{
+  font-size:11px;font-weight:400;
+  color:rgba(255,255,255,.4);margin-bottom:20px;
+}
+.share-card-images{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;
+  margin-bottom:20px;
+}
+.share-card-images img{
+  width:100%;aspect-ratio:3/4;object-fit:cover;
+  filter:grayscale(20%);
+}
+.share-card-stats{
+  display:flex;gap:20px;
+  padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.share-card-stat{
+  display:flex;flex-direction:column;gap:2px;
+}
+.share-card-stat-label{
+  font-size:8px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.3);
+}
+.share-card-stat-val{
+  font-size:16px;font-weight:600;color:var(--white);
+}
+.share-card-stat-val.up{color:#6ECF8E}
+
+.share-card-footer{
+  margin-top:20px;padding-top:16px;
+  border-top:1px solid rgba(255,255,255,.1);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.share-card-logo{
+  font-family:var(--serif);font-weight:500;
+  font-size:16px;color:rgba(255,255,255,.5);
+}
+.share-card-score{
+  font-size:9px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.3);
+}
+
+.share-dismiss{
+  margin-top:24px;
+  border:none;background:none;
+  font-family:var(--sans);font-size:10px;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);cursor:pointer;
+}
+.share-dismiss:active{opacity:.5}
+
+/* ═══════════════════════════════════════════
+   BOTTOM TAB BAR
+   ═══════════════════════════════════════════ */
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(248,246,242,.95);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(0,0,0,.06);
+  display:flex;
+  padding:8px 0 28px;
+}
+.tab-bar-item{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;gap:4px;
+  cursor:pointer;padding:6px 0;
+  border:none;background:none;
+  font-family:var(--sans);
+}
+.tab-bar-item:active{opacity:.5}
+.tab-bar-icon{font-size:20px;line-height:1}
+.tab-bar-label{
+  font-size:9px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--dim);
+}
+.tab-bar-item.active .tab-bar-label{color:var(--black)}
+
+/* ═══════════════════════════════════════════
+   SCOUT TOAST
+   ═══════════════════════════════════════════ */
+.toast{
+  position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-100px);
+  z-index:500;
+  background:var(--black);color:var(--white);
+  padding:12px 20px;
+  font-size:11px;font-weight:600;letter-spacing:.08em;
+  white-space:nowrap;
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ═══════════════════════════════════════════
+   CO-SIGN SECTION
+   ═══════════════════════════════════════════ */
+.cosign-section{
+  margin:0 20px 20px;
+  padding:20px;
+  background:var(--cream);
+}
+.cosign-title{
+  font-size:9px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--dim-light);
+  margin-bottom:14px;
+}
+.cosign-board{
+  display:flex;gap:12px;align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid rgba(0,0,0,.04);
+  cursor:pointer;
+}
+.cosign-board:active{opacity:.6}
+.cosign-board-imgs{
+  display:flex;
+}
+.cosign-board-imgs img{
+  width:32px;height:40px;object-fit:cover;
+  border:2px solid var(--cream);
+  margin-left:-8px;
+}
+.cosign-board-imgs img:first-child{margin-left:0}
+.cosign-board-info{flex:1}
+.cosign-board-name{
+  font-family:var(--serif);font-weight:500;
+  font-size:14px;color:var(--black);
+}
+.cosign-board-meta{
+  font-size:10px;color:var(--dim);margin-top:2px;
+}
+.cosign-board-pnl{
+  font-size:14px;font-weight:700;
+}
+.cosign-board-pnl.up{color:var(--growth)}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.fade-up{animation:fadeUp .6s cubic-bezier(.16,1,.3,1) both}
+.fade-up-1{animation-delay:.1s}
+.fade-up-2{animation-delay:.2s}
+.fade-up-3{animation-delay:.3s}
+.fade-up-4{animation-delay:.4s}
+.fade-up-5{animation-delay:.5s}
+.fade-up-6{animation-delay:.6s}
+.fade-up-7{animation-delay:.7s}
+</style>
+</head>
+<body>
+
+<div class="device-wrap">
+  <span class="device-label">HIGH STREET — SCOUT PROTOTYPE</span>
+  <div class="phone">
+    <div class="screen" id="screen">
+
+      <!-- ═══ SPLASH ═══ -->
+      <div class="view" id="splash">
+        <div class="splash-brand">HIGH STREET</div>
+        <h1 class="splash-title">
+          Scout
+          <em>the future</em>
+        </h1>
+        <p class="splash-desc">
+          Find trends before they happen.<br>
+          Build your board. Prove your taste.<br>
+          Get paid when you're right.
+        </p>
+        <button class="splash-start" onclick="enterApp()">ENTER</button>
+        <div class="splash-line"></div>
+        <div class="splash-fi">Powered by FI Intelligence</div>
+      </div>
+
+      <!-- ═══ FEED ═══ -->
+      <div class="view hidden-fade" id="feed">
+        <div class="nav">
+          <div class="nav-row">
+            <div class="nav-logo">High Street</div>
+            <div class="nav-actions">
+              <div class="nav-credits" id="credit-count">250 CR</div>
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+          </div>
+          <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchTab(this,'discover')">Discover</div>
+            <div class="nav-tab" onclick="switchTab(this,'rising')">Rising</div>
+            <div class="nav-tab" onclick="switchTab(this,'new')">New Today</div>
+          </div>
+        </div>
+
+        <!-- Daily Drop -->
+        <div class="drop-banner fade-up">
+          <div class="drop-dot"></div>
+          <div class="drop-text">
+            <div class="drop-label">Daily Drop</div>
+            <div class="drop-sub">7 new trends detected by FI</div>
+          </div>
+          <div class="drop-time">9:00</div>
+        </div>
+
+        <!-- Co-sign Section -->
+        <div class="cosign-section fade-up fade-up-1">
+          <div class="cosign-title">Boards to Co-Sign</div>
+          <div class="cosign-board" onclick="showToast('Co-sign coming soon')">
+            <div class="cosign-board-imgs">
+              <img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=100&h=120&fit=crop" alt="">
+              <img src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=100&h=120&fit=crop" alt="">
+              <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=100&h=120&fit=crop" alt="">
+            </div>
+            <div class="cosign-board-info">
+              <div class="cosign-board-name">Soft Industrial</div>
+              <div class="cosign-board-meta">@elena_v · 23 co-signs</div>
+            </div>
+            <div class="cosign-board-pnl up">+18%</div>
+          </div>
+          <div class="cosign-board" onclick="showToast('Co-sign coming soon')">
+            <div class="cosign-board-imgs">
+              <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=100&h=120&fit=crop" alt="">
+              <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=100&h=120&fit=crop" alt="">
+            </div>
+            <div class="cosign-board-info">
+              <div class="cosign-board-name">Post-Minimalism</div>
+              <div class="cosign-board-meta">@kai.style · 41 co-signs</div>
+            </div>
+            <div class="cosign-board-pnl up">+24%</div>
+          </div>
+        </div>
+
+        <!-- Feed -->
+        <div class="feed" id="feed-list"></div>
+      </div>
+
+      <!-- ═══ DETAIL ═══ -->
+      <div class="view hidden" id="detail">
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+        <div id="detail-content"></div>
+        <div class="scout-btn-wrap">
+          <button class="scout-btn" id="scout-btn" onclick="scoutTrend()">
+            SCOUT THIS TREND <span class="price" id="scout-price">· 30 CR</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ═══ BOARD ═══ -->
+      <div class="view hidden" id="board">
+        <div class="board-header">
+          <button class="board-back" onclick="closeBoard()">← Back</button>
+          <div class="board-title-row">
+            <div class="board-title">Your Board</div>
+            <div class="board-pnl up" id="board-total-pnl">+14.2%</div>
+          </div>
+        </div>
+        <div class="board-meta">
+          <span><b id="board-count">0</b> scouted</span>
+          <span><b id="board-staked">0</b> CR staked</span>
+          <span>Resolves <b>Jul 12</b></span>
+        </div>
+        <div class="board-items" id="board-items"></div>
+        <div class="board-share-wrap">
+          <button class="board-share" onclick="showShareCard()">SHARE YOUR BOARD</button>
+        </div>
+      </div>
+
+      <!-- ═══ SHARE OVERLAY ═══ -->
+      <div id="share-overlay">
+        <div class="share-card">
+          <div class="share-card-brand">HIGH STREET</div>
+          <div class="share-card-title" id="share-title">My Board</div>
+          <div class="share-card-author" id="share-author">@you · Apr 2026</div>
+          <div class="share-card-images" id="share-images"></div>
+          <div class="share-card-stats">
+            <div class="share-card-stat">
+              <div class="share-card-stat-label">P&L</div>
+              <div class="share-card-stat-val up" id="share-pnl">+14.2%</div>
+            </div>
+            <div class="share-card-stat">
+              <div class="share-card-stat-label">Scouted</div>
+              <div class="share-card-stat-val" id="share-count">0</div>
+            </div>
+            <div class="share-card-stat">
+              <div class="share-card-stat-label">Avg Early</div>
+              <div class="share-card-stat-val" id="share-early">2.1mo</div>
+            </div>
+          </div>
+          <div class="share-card-footer">
+            <div class="share-card-logo">High Street</div>
+            <div class="share-card-score">Scout Score: 72%</div>
+          </div>
+        </div>
+        <button class="share-dismiss" onclick="hideShareCard()">CLOSE</button>
+      </div>
+
+      <!-- ═══ TAB BAR ═══ -->
+      <div class="tab-bar" id="tab-bar" style="display:none">
+        <button class="tab-bar-item active" onclick="showFeed(this)">
+          <span class="tab-bar-icon">◎</span>
+          <span class="tab-bar-label">Scout</span>
+        </button>
+        <button class="tab-bar-item" onclick="showBoard(this)">
+          <span class="tab-bar-icon">▦</span>
+          <span class="tab-bar-label">Board</span>
+        </button>
+        <button class="tab-bar-item" onclick="showToast('Profile coming soon')">
+          <span class="tab-bar-icon">◯</span>
+          <span class="tab-bar-label">Profile</span>
+        </button>
+      </div>
+
+      <!-- TOAST -->
+      <div class="toast" id="toast"></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// TREND DATA — sourced from FI Intelligence
+// ═══════════════════════════════════════════
+const TRENDS = [
+  {
+    name:'Sheer Layering',
+    sub:'Translucent fabrics, layered evening construction. Seen across Valentino, Dior, and Bottega Veneta SS26.',
+    fi:0.0312, delta:+18, lifecycle:'GROWTH',
+    price:38, signals:{runway:82,editorial:71,social:65,retail:44},
+    chart:[20,25,28,32,35,42,48,55,60,62,68,72,78,85,90,88,92,95],
+    img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Sculpted Cocoon Coats',
+    sub:'Architectural wool silhouettes with belted waists and exaggerated dropped shoulders. Dominant at Prada and Jil Sander.',
+    fi:0.0272, delta:+6, lifecycle:'PEAK',
+    price:42, signals:{runway:91,editorial:78,social:58,retail:62},
+    chart:[30,35,45,55,65,70,78,82,88,92,95,96,97,96,95,93,92,90],
+    img:'https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Minimalist Maxi Coats',
+    sub:'A-line floor-length wool in solid black and camel. The Row and Totême leading the charge.',
+    fi:0.0297, delta:+12, lifecycle:'GROWTH',
+    price:35, signals:{runway:75,editorial:82,social:70,retail:55},
+    chart:[15,18,22,28,35,40,48,55,62,68,72,78,82,85,88,90,92,95],
+    img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Raw-Edge Knitwear',
+    sub:'Deconstructed knits with visible seams and frayed edges. Emerging from Marni, Acne Studios, and independent labels.',
+    fi:0.0089, delta:+42, lifecycle:'EARLY',
+    price:12, signals:{runway:35,editorial:22,social:45,retail:8},
+    chart:[2,3,3,4,5,5,6,8,10,12,15,18,22,28,32,38,42,48],
+    img:'https://images.unsplash.com/photo-1434389677669-e08b4cda3a12?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Baroque Cropped Glam',
+    sub:'Embellished crop silhouettes with ornate beadwork. Versace revival energy meeting Y2K nostalgia.',
+    fi:0.0285, delta:-4, lifecycle:'PEAK',
+    price:44, signals:{runway:88,editorial:72,social:82,retail:68},
+    chart:[40,50,60,68,75,80,85,90,94,96,98,97,96,95,93,92,90,88],
+    img:'https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Washed Utility Cargo',
+    sub:'Oversized cargo with bleached and sun-faded finishes. Post-Gorpcore evolution toward softer silhouettes.',
+    fi:0.0198, delta:-8, lifecycle:'DECLINE',
+    price:28, signals:{runway:42,editorial:35,social:55,retail:72},
+    chart:[50,58,65,72,78,82,85,88,90,88,85,80,75,68,62,55,50,45],
+    img:'https://images.unsplash.com/photo-1544022613-e87ca75a784a?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Silver Draped Mini',
+    sub:'Asymmetric metallic draping for evening. Space-age glamour with 70s disco undertones.',
+    fi:0.0263, delta:+2, lifecycle:'PEAK',
+    price:40, signals:{runway:78,editorial:68,social:75,retail:58},
+    chart:[35,42,50,58,65,72,78,82,88,92,94,95,96,95,94,93,92,92],
+    img:'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Indie Sleaze Revival',
+    sub:'Grunge-glam returns — messy hair, leather, visible lace. The Libertines meet early Hedi Slimane.',
+    fi:0.0183, delta:-12, lifecycle:'DECLINE',
+    price:24, signals:{runway:30,editorial:28,social:68,retail:45},
+    chart:[25,35,48,58,68,75,80,82,78,72,65,58,52,48,42,38,35,30],
+    img:'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Ceramic Jewelry',
+    sub:'Hand-formed porcelain and clay accessories. Craft-forward pieces from independent ateliers gaining editorial traction.',
+    fi:0.0065, delta:+68, lifecycle:'EARLY',
+    price:8, signals:{runway:12,editorial:18,social:35,retail:5},
+    chart:[1,1,2,2,3,3,4,5,6,8,10,12,15,20,25,30,38,48],
+    img:'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Burgundy Leather',
+    sub:'Deep oxblood leather across outerwear, bags, and boots. Bottega and Saint Laurent FW26 keynote.',
+    fi:0.0105, delta:+35, lifecycle:'EARLY',
+    price:15, signals:{runway:45,editorial:32,social:28,retail:12},
+    chart:[3,4,5,6,8,10,12,15,18,22,28,32,38,42,48,55,62,68],
+    img:'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Metallic Tailoring',
+    sub:'Shimmer-thread wool blends for day. Aristocratic shimmer meeting workwear structure.',
+    fi:0.0251, delta:+8, lifecycle:'GROWTH',
+    price:36, signals:{runway:72,editorial:65,social:55,retail:48},
+    chart:[20,25,30,35,42,48,55,60,65,70,75,78,82,85,88,90,92,93],
+    img:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=600&h=900&fit=crop'
+  },
+  {
+    name:'Oversized Denim',
+    sub:'Wide vintage silhouettes in washed indigo. Japanese selvedge meets American workwear.',
+    fi:0.0221, delta:-5, lifecycle:'DECLINE',
+    price:30, signals:{runway:55,editorial:48,social:72,retail:78},
+    chart:[45,52,60,68,75,80,85,88,90,88,85,82,78,72,68,62,58,55],
+    img:'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=600&h=900&fit=crop'
+  },
+];
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let credits = 250;
+let board = [];
+let currentTrend = null;
+
+// ═══════════════════════════════════════════
+// ENTER APP
+// ═══════════════════════════════════════════
+function enterApp(){
+  const splash = document.getElementById('splash');
+  splash.classList.add('hidden-fade');
+  setTimeout(() => {
+    splash.style.display = 'none';
+    document.getElementById('feed').classList.remove('hidden-fade');
+    document.getElementById('tab-bar').style.display = 'flex';
+    renderFeed();
+  }, 500);
+}
+
+// ═══════════════════════════════════════════
+// RENDER FEED
+// ═══════════════════════════════════════════
+function renderFeed(){
+  const list = document.getElementById('feed-list');
+  list.innerHTML = '';
+
+  // Sort: EARLY first (cheapest, most upside), then GROWTH, PEAK, DECLINE
+  const order = {EARLY:0, GROWTH:1, PEAK:2, DECLINE:3};
+  const sorted = [...TRENDS].sort((a,b) => order[a.lifecycle] - order[b.lifecycle]);
+
+  sorted.forEach((t, i) => {
+    const scouted = board.find(b => b.name === t.name);
+    const card = document.createElement('div');
+    card.className = `trend-card fade-up fade-up-${Math.min(i+1, 7)}`;
+    card.onclick = () => openDetail(t);
+
+    const lifecycleClass = `lifecycle-${t.lifecycle.toLowerCase()}`;
+    const deltaSign = t.delta >= 0 ? '+' : '';
+    const deltaClass = t.delta >= 0 ? 'up' : 'down';
+
+    card.innerHTML = `
+      <img class="trend-card-img" src="${t.img}" alt="${t.name}" loading="lazy">
+      <div class="trend-card-body">
+        <div class="trend-card-row">
+          <div class="trend-card-name">${t.name}</div>
+          <div class="trend-card-lifecycle ${lifecycleClass}">${t.lifecycle}</div>
+        </div>
+        <div class="trend-card-sub">${t.sub}</div>
+        <div class="trend-card-data">
+          <div class="trend-datum">
+            <div class="trend-datum-label">FI Score</div>
+            <div class="trend-datum-val">${t.fi.toFixed(4)}</div>
+          </div>
+          <div class="trend-datum">
+            <div class="trend-datum-label">90d Change</div>
+            <div class="trend-datum-val ${deltaClass}">${deltaSign}${t.delta}%</div>
+          </div>
+          <div class="trend-datum">
+            <div class="trend-datum-label">Price</div>
+            <div class="trend-datum-val">${t.price} CR</div>
+          </div>
+          ${scouted ? '<div class="trend-datum"><div class="trend-datum-label">Status</div><div class="trend-datum-val up">SCOUTED</div></div>' : ''}
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+// DETAIL VIEW
+// ═══════════════════════════════════════════
+function openDetail(trend){
+  currentTrend = trend;
+  const detail = document.getElementById('detail');
+  const content = document.getElementById('detail-content');
+  const scouted = board.find(b => b.name === trend.name);
+
+  const lifecycleClass = `lifecycle-${trend.lifecycle.toLowerCase()}`;
+  const dotColor = trend.lifecycle === 'EARLY' ? 'var(--early)' :
+                   trend.lifecycle === 'GROWTH' ? 'var(--growth)' :
+                   trend.lifecycle === 'PEAK' ? 'var(--peak)' : 'var(--decline)';
+  const deltaSign = trend.delta >= 0 ? '+' : '';
+  const deltaClass = trend.delta >= 0 ? 'up' : 'down';
+
+  // Generate chart bars
+  const maxChart = Math.max(...trend.chart);
+  const chartBars = trend.chart.map((v, i) =>
+    `<div class="detail-chart-bar${i === trend.chart.length-1 ? ' current' : ''}" style="height:${(v/maxChart)*100}%"></div>`
+  ).join('');
+
+  content.innerHTML = `
+    <img class="detail-hero" src="${trend.img}" alt="${trend.name}">
+    <div class="detail-body">
+      <div class="detail-eyebrow">
+        <span class="detail-eyebrow-dot" style="background:${dotColor}"></span>
+        ${trend.lifecycle} · FI INTELLIGENCE
+      </div>
+      <h1 class="detail-title">${trend.name}</h1>
+      <p class="detail-subtitle">${trend.sub}</p>
+
+      <div class="detail-grid">
+        <div class="detail-stat">
+          <div class="detail-stat-label">FI Score</div>
+          <div class="detail-stat-val">${trend.fi.toFixed(4)}</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-label">90-Day Change</div>
+          <div class="detail-stat-val ${deltaClass}">${deltaSign}${trend.delta}%</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-label">Scout Price</div>
+          <div class="detail-stat-val">${trend.price} CR</div>
+        </div>
+        <div class="detail-stat">
+          <div class="detail-stat-label">Lifecycle</div>
+          <div class="detail-stat-val">${trend.lifecycle}</div>
+        </div>
+      </div>
+
+      <div class="detail-chart">
+        ${chartBars}
+        <div class="detail-chart-label">18-month trajectory</div>
+      </div>
+
+      <div class="detail-section-title">Signal Breakdown</div>
+      <div class="detail-signals">
+        <div class="detail-signal">
+          <span class="detail-signal-name">Runway</span>
+          <div class="detail-signal-bar-wrap">
+            <div class="detail-signal-bar" style="width:0%" data-width="${trend.signals.runway}%"></div>
+          </div>
+        </div>
+        <div class="detail-signal">
+          <span class="detail-signal-name">Editorial</span>
+          <div class="detail-signal-bar-wrap">
+            <div class="detail-signal-bar" style="width:0%" data-width="${trend.signals.editorial}%"></div>
+          </div>
+        </div>
+        <div class="detail-signal">
+          <span class="detail-signal-name">Social</span>
+          <div class="detail-signal-bar-wrap">
+            <div class="detail-signal-bar" style="width:0%" data-width="${trend.signals.social}%"></div>
+          </div>
+        </div>
+        <div class="detail-signal">
+          <span class="detail-signal-name">Retail</span>
+          <div class="detail-signal-bar-wrap">
+            <div class="detail-signal-bar" style="width:0%" data-width="${trend.signals.retail}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Update scout button
+  const btn = document.getElementById('scout-btn');
+  const priceEl = document.getElementById('scout-price');
+  if(scouted){
+    btn.classList.add('scouted');
+    btn.innerHTML = 'SCOUTED ✓';
+  } else {
+    btn.classList.remove('scouted');
+    btn.innerHTML = `SCOUT THIS TREND <span class="price">· ${trend.price} CR</span>`;
+  }
+
+  // Show detail, hide tab bar
+  detail.classList.remove('hidden');
+  detail.scrollTop = 0;
+  document.getElementById('tab-bar').style.display = 'none';
+
+  // Animate signal bars
+  setTimeout(() => {
+    detail.querySelectorAll('.detail-signal-bar').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 300);
+}
+
+function closeDetail(){
+  document.getElementById('detail').classList.add('hidden');
+  document.getElementById('tab-bar').style.display = 'flex';
+  currentTrend = null;
+}
+
+// ═══════════════════════════════════════════
+// SCOUT A TREND
+// ═══════════════════════════════════════════
+function scoutTrend(){
+  if(!currentTrend) return;
+  const already = board.find(b => b.name === currentTrend.name);
+  if(already){
+    showToast('Already scouted');
+    return;
+  }
+  if(credits < currentTrend.price){
+    showToast('Not enough credits');
+    return;
+  }
+
+  credits -= currentTrend.price;
+  document.getElementById('credit-count').textContent = credits + ' CR';
+
+  // Simulate P&L based on lifecycle
+  let pnl;
+  if(currentTrend.lifecycle === 'EARLY') pnl = Math.round(20 + Math.random() * 60);
+  else if(currentTrend.lifecycle === 'GROWTH') pnl = Math.round(5 + Math.random() * 25);
+  else if(currentTrend.lifecycle === 'PEAK') pnl = Math.round(-10 + Math.random() * 15);
+  else pnl = Math.round(-30 + Math.random() * 10);
+
+  board.push({
+    ...currentTrend,
+    entryPrice: currentTrend.price,
+    pnl: pnl,
+    entryDate: 'Apr 13'
+  });
+
+  // Update button
+  const btn = document.getElementById('scout-btn');
+  btn.classList.add('scouted');
+  btn.innerHTML = 'SCOUTED ✓';
+
+  showToast(`Scouted ${currentTrend.name} for ${currentTrend.price} CR`);
+  renderFeed();
+  renderBoard();
+}
+
+// ═══════════════════════════════════════════
+// BOARD
+// ═══════════════════════════════════════════
+function renderBoard(){
+  const items = document.getElementById('board-items');
+  items.innerHTML = '';
+
+  let totalStaked = 0;
+  let weightedPnl = 0;
+
+  board.forEach(item => {
+    totalStaked += item.entryPrice;
+    weightedPnl += item.pnl * item.entryPrice;
+
+    const pnlSign = item.pnl >= 0 ? '+' : '';
+    const pnlClass = item.pnl >= 0 ? 'up' : 'down';
+    const lifecycleClass = `lifecycle-${item.lifecycle.toLowerCase()}`;
+
+    const el = document.createElement('div');
+    el.className = 'board-item';
+    el.innerHTML = `
+      <img class="board-item-img" src="${item.img}" alt="${item.name}">
+      <div class="board-item-info">
+        <div class="board-item-name">${item.name}</div>
+        <div class="board-item-lifecycle ${lifecycleClass}">${item.lifecycle}</div>
+        <div class="board-item-entry">Scouted ${item.entryDate} · ${item.entryPrice} CR</div>
+      </div>
+      <div class="board-item-pnl ${pnlClass}">${pnlSign}${item.pnl}%</div>
+    `;
+    items.appendChild(el);
+  });
+
+  const avgPnl = totalStaked > 0 ? (weightedPnl / totalStaked).toFixed(1) : '0.0';
+  const pnlSign = parseFloat(avgPnl) >= 0 ? '+' : '';
+  document.getElementById('board-total-pnl').textContent = `${pnlSign}${avgPnl}%`;
+  document.getElementById('board-total-pnl').className = `board-pnl ${parseFloat(avgPnl) >= 0 ? 'up' : 'down'}`;
+  document.getElementById('board-count').textContent = board.length;
+  document.getElementById('board-staked').textContent = totalStaked;
+}
+
+function showBoard(tabEl){
+  if(tabEl){
+    document.querySelectorAll('.tab-bar-item').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+  document.getElementById('feed').classList.add('hidden-left');
+  document.getElementById('board').classList.remove('hidden');
+  document.getElementById('detail').classList.add('hidden');
+  renderBoard();
+}
+
+function closeBoard(){
+  document.getElementById('board').classList.add('hidden');
+  document.getElementById('feed').classList.remove('hidden-left');
+  document.querySelectorAll('.tab-bar-item').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-bar-item').classList.add('active');
+}
+
+function showFeed(tabEl){
+  if(tabEl){
+    document.querySelectorAll('.tab-bar-item').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+  }
+  document.getElementById('board').classList.add('hidden');
+  document.getElementById('feed').classList.remove('hidden-left');
+  document.getElementById('feed').classList.remove('hidden-fade');
+}
+
+// ═══════════════════════════════════════════
+// SHARE CARD
+// ═══════════════════════════════════════════
+function showShareCard(){
+  const overlay = document.getElementById('share-overlay');
+
+  // Populate images
+  const imgContainer = document.getElementById('share-images');
+  imgContainer.innerHTML = '';
+  board.slice(0, 3).forEach(item => {
+    const img = document.createElement('img');
+    img.src = item.img;
+    img.alt = item.name;
+    imgContainer.appendChild(img);
+  });
+
+  document.getElementById('share-count').textContent = board.length;
+  document.getElementById('share-pnl').textContent = document.getElementById('board-total-pnl').textContent;
+
+  overlay.classList.add('show');
+}
+
+function hideShareCard(){
+  document.getElementById('share-overlay').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════
+// NAV TABS
+// ═══════════════════════════════════════════
+function switchTab(el, tab){
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  // Could filter feed here — for prototype just show toast
+  if(tab === 'new') showToast('Showing today\'s drops');
+  else if(tab === 'rising') showToast('Sorted by momentum');
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

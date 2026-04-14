@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VantageX — Platform</title>
+<style>
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-Regular.ttf') format('truetype');font-weight:400;font-display:swap}
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-Medium.ttf') format('truetype');font-weight:500;font-display:swap}
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-SemiBold.ttf') format('truetype');font-weight:600;font-display:swap}
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-Bold.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-Black.ttf') format('truetype');font-weight:900;font-display:swap}
+@font-face{font-family:'BaseNeueCond';src:url('fonts/base_neue/BaseNeueTrial-CondensedBlack.ttf') format('truetype');font-weight:900;font-display:swap}
+@font-face{font-family:'BaseNeueCond';src:url('fonts/base_neue/BaseNeueTrial-CondensedBold.ttf') format('truetype');font-weight:700;font-display:swap}
+@font-face{font-family:'BaseNeue';src:url('fonts/base_neue/BaseNeueTrial-Light.ttf') format('truetype');font-weight:300;font-display:swap}
+
+:root{
+  --bg:#FAFAFA;
+  --surface:#FFFFFF;
+  --surface-2:#F0F0F0;
+  --border:#E0E0E0;
+  --border-light:#D0D0D0;
+  --neon:#2DBE00;
+  --neon-dim:rgba(45,190,0,.10);
+  --neon-dark:#1A8A00;
+  --text:#111111;
+  --text-dim:#555555;
+  --text-muted:#999999;
+  --green:#00A854;
+  --red:#E53935;
+  --blue:#1E88E5;
+  --purple:#7B1FA2;
+  --orange:#EF6C00;
+  --early:#7B1FA2;
+  --growth:#00A854;
+  --peak:#EF8C00;
+  --decline:#E53935;
+  --font:'BaseNeue',system-ui,-apple-system,'Helvetica Neue',sans-serif;
+  --font-cond:'BaseNeueCond','BaseNeue',system-ui,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{
+  font-family:var(--font);font-weight:400;
+  background:var(--bg);color:var(--text);
+  line-height:1.5;font-size:14px;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+::selection{background:var(--neon);color:#fff}
+
+/* ═══════════════════════════════════════════
+   TOP NAV
+   ═══════════════════════════════════════════ */
+.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:rgba(250,250,250,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  height:56px;display:flex;align-items:center;
+  padding:0 24px;gap:24px;
+}
+.topnav-logo{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:22px;text-transform:uppercase;
+  color:var(--text);letter-spacing:-.01em;
+  cursor:pointer;
+}
+.topnav-logo span{color:var(--neon)}
+.topnav-links{display:flex;gap:4px;margin-left:16px}
+.topnav-link{
+  padding:8px 16px;font-size:12px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--text-muted);cursor:pointer;
+  border-radius:6px;transition:all .15s;
+  border:none;background:none;
+}
+.topnav-link:hover{color:var(--text);background:var(--surface-2)}
+.topnav-link.active{color:var(--neon-dark);background:var(--neon-dim)}
+.topnav-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.topnav-credits{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:700;color:var(--neon-dark);
+  padding:6px 14px;border:1px solid var(--neon);
+  border-radius:6px;background:var(--neon-dim);
+}
+.topnav-credits svg{width:14px;height:14px}
+.topnav-avatar{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--neon);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;cursor:pointer;
+  transition:box-shadow .15s;
+}
+.topnav-avatar:hover{box-shadow:0 0 0 3px var(--neon-dim)}
+.topnav-search{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 14px;border:1px solid var(--border);
+  border-radius:6px;background:var(--surface);
+  color:var(--text-muted);font-size:12px;cursor:pointer;
+  transition:border-color .15s;min-width:200px;
+}
+.topnav-search:hover{border-color:var(--neon)}
+.topnav-search svg{width:14px;height:14px;opacity:.4}
+.topnav-search span{flex:1}
+.topnav-search kbd{
+  font-family:var(--font);font-size:10px;font-weight:600;
+  padding:2px 6px;background:var(--surface-2);border-radius:3px;
+  color:var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════ */
+.app{
+  margin-top:56px;display:flex;
+  min-height:calc(100vh - 56px);
+}
+.main{flex:1;padding:24px;overflow-y:auto}
+.sidebar{
+  width:340px;min-width:340px;
+  border-left:1px solid var(--border);
+  background:var(--surface);
+  overflow-y:auto;height:calc(100vh - 56px);
+  position:sticky;top:56px;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE VIEWS
+   ═══════════════════════════════════════════ */
+.page-view{display:none}
+.page-view.active{display:block}
+
+/* ═══════════════════════════════════════════
+   HOME PAGE
+   ═══════════════════════════════════════════ */
+.section-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:20px;
+}
+.section-label{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:24px;text-transform:uppercase;
+  color:var(--text);
+}
+.section-label span{color:var(--neon)}
+.section-more{
+  font-size:11px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--neon-dark);
+  cursor:pointer;border:none;background:none;
+  transition:opacity .15s;
+}
+.section-more:hover{opacity:.7}
+
+/* ═══════════════════════════════════════════
+   TOP SELLERS GRID
+   ═══════════════════════════════════════════ */
+.sellers-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:16px;
+  margin-bottom:40px;
+}
+.seller-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;padding:20px 16px;
+  text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;
+  overflow:hidden;
+}
+.seller-card:hover{
+  border-color:var(--neon);
+  box-shadow:0 4px 20px rgba(45,190,0,.08);
+  transform:translateY(-2px);
+}
+.seller-rank{
+  position:absolute;top:10px;left:10px;
+  font-size:10px;font-weight:900;
+  font-family:var(--font-cond);
+  color:var(--text-muted);
+}
+.seller-avatar{
+  width:64px;height:64px;border-radius:50%;
+  margin:0 auto 12px;overflow:hidden;
+  border:2px solid var(--border);
+  transition:border-color .2s;
+}
+.seller-card:hover .seller-avatar{border-color:var(--neon)}
+.seller-avatar img{width:100%;height:100%;object-fit:cover}
+.seller-name{
+  font-weight:700;font-size:14px;
+  color:var(--text);margin-bottom:2px;
+}
+.seller-handle{
+  font-size:11px;color:var(--text-muted);margin-bottom:10px;
+}
+.seller-stats{
+  display:flex;justify-content:center;gap:16px;
+  margin-bottom:12px;
+}
+.seller-stat{display:flex;flex-direction:column;gap:1px}
+.seller-stat-val{
+  font-size:14px;font-weight:700;color:var(--text);
+}
+.seller-stat-label{
+  font-size:9px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.seller-score{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:11px;font-weight:700;
+  padding:4px 10px;border-radius:20px;
+  background:var(--neon-dim);color:var(--neon-dark);
+}
+.seller-score svg{width:12px;height:12px}
+.seller-follow{
+  margin-top:10px;
+  padding:6px 16px;border:1px solid var(--neon);
+  border-radius:6px;background:none;
+  font-family:var(--font);font-size:10px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--neon-dark);cursor:pointer;
+  transition:all .15s;
+}
+.seller-follow:hover{background:var(--neon);color:#fff}
+.seller-follow.following{
+  background:var(--neon-dim);border-color:var(--neon-dim);
+  color:var(--neon-dark);
+}
+
+/* ═══════════════════════════════════════════
+   TRENDING ITEMS GRID
+   ═══════════════════════════════════════════ */
+.trends-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+  margin-bottom:24px;
+}
+.trend-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;overflow:hidden;cursor:pointer;
+  transition:all .2s;
+}
+.trend-card:hover{
+  border-color:var(--neon);
+  box-shadow:0 4px 20px rgba(45,190,0,.08);
+  transform:translateY(-2px);
+}
+.trend-img{
+  width:100%;aspect-ratio:4/5;object-fit:cover;display:block;
+}
+.trend-body{padding:14px}
+.trend-row{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  margin-bottom:6px;
+}
+.trend-name{
+  font-weight:700;font-size:14px;color:var(--text);
+  flex:1;line-height:1.2;
+}
+.trend-lifecycle{
+  font-size:8px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 7px;
+  border-radius:3px;white-space:nowrap;margin-left:8px;
+}
+.lc-early{background:rgba(123,31,162,.08);color:var(--early)}
+.lc-growth{background:rgba(0,168,84,.08);color:var(--growth)}
+.lc-peak{background:rgba(239,140,0,.08);color:var(--peak)}
+.lc-decline{background:rgba(229,57,53,.08);color:var(--decline)}
+
+.trend-sub{
+  font-size:11px;color:var(--text-muted);line-height:1.4;
+  margin-bottom:10px;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.trend-meta{
+  display:flex;gap:16px;align-items:center;
+  padding-top:10px;border-top:1px solid var(--surface-2);
+}
+.trend-meta-item{display:flex;flex-direction:column;gap:1px}
+.trend-meta-label{
+  font-size:8px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.trend-meta-val{font-size:13px;font-weight:700;color:var(--text)}
+.trend-meta-val.up{color:var(--green)}
+.trend-meta-val.down{color:var(--red)}
+
+/* mini sparkline */
+.sparkline{width:60px;height:24px}
+.sparkline polyline{fill:none;stroke:var(--neon);stroke-width:1.5}
+
+/* ═══════════════════════════════════════════
+   SIDEBAR — TRADES PANE
+   ═══════════════════════════════════════════ */
+.sidebar-header{
+  padding:20px 20px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surface);z-index:10;
+}
+.sidebar-title{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:16px;text-transform:uppercase;
+  color:var(--text);margin-bottom:4px;
+}
+.sidebar-title span{color:var(--neon)}
+.sidebar-sub{font-size:11px;color:var(--text-muted)}
+
+.sidebar-tabs{
+  display:flex;gap:0;padding:0 20px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-tab{
+  flex:1;text-align:center;padding:10px 0;
+  font-size:10px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-muted);
+  cursor:pointer;border-bottom:2px solid transparent;
+  margin-bottom:-1px;transition:all .15s;
+  background:none;border-left:none;border-right:none;border-top:none;
+}
+.sidebar-tab.active{color:var(--neon-dark);border-bottom-color:var(--neon)}
+
+.trades-list{padding:0}
+.trade-item{
+  display:flex;gap:12px;align-items:center;
+  padding:14px 20px;
+  border-bottom:1px solid var(--surface-2);
+  transition:background .1s;cursor:pointer;
+}
+.trade-item:hover{background:var(--surface-2)}
+.trade-avatar{
+  width:32px;height:32px;border-radius:50%;
+  overflow:hidden;flex-shrink:0;
+}
+.trade-avatar img{width:100%;height:100%;object-fit:cover}
+.trade-info{flex:1;min-width:0}
+.trade-action{
+  font-size:12px;font-weight:600;color:var(--text);
+  line-height:1.3;
+}
+.trade-action .trade-seller{color:var(--neon-dark);font-weight:700}
+.trade-action .trade-trend{font-weight:700}
+.trade-time{
+  font-size:10px;color:var(--text-muted);margin-top:2px;
+}
+.trade-badge{
+  font-size:9px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;padding:3px 8px;
+  border-radius:3px;flex-shrink:0;
+}
+.trade-badge.scout{background:var(--neon-dim);color:var(--neon-dark)}
+.trade-badge.sell{background:rgba(229,57,53,.08);color:var(--red)}
+.trade-badge.cosign{background:rgba(30,136,229,.08);color:var(--blue)}
+.trade-badge.list{background:rgba(239,140,0,.08);color:var(--orange)}
+
+/* co-sign summary */
+.cosign-summary{
+  margin:16px 20px;padding:14px;
+  background:var(--neon-dim);border-radius:8px;
+}
+.cosign-summary-title{
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--neon-dark);margin-bottom:8px;
+}
+.cosign-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:4px;
+}
+.cosign-row:last-child{margin-bottom:0}
+.cosign-label{font-size:12px;color:var(--text-dim)}
+.cosign-val{font-size:12px;font-weight:700;color:var(--text)}
+.cosign-val.positive{color:var(--green)}
+
+/* leaderboard mini */
+.leaderboard-mini{padding:12px 20px}
+.lb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--surface-2);
+}
+.lb-item:last-child{border-bottom:none}
+.lb-rank{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:14px;color:var(--text-muted);width:20px;
+}
+.lb-avatar{
+  width:28px;height:28px;border-radius:50%;overflow:hidden;
+}
+.lb-avatar img{width:100%;height:100%;object-fit:cover}
+.lb-info{flex:1}
+.lb-name{font-size:12px;font-weight:700;color:var(--text)}
+.lb-handle{font-size:10px;color:var(--text-muted)}
+.lb-score{
+  font-size:12px;font-weight:700;color:var(--neon-dark);
+}
+
+/* ═══════════════════════════════════════════
+   PROFILE PAGE
+   ═══════════════════════════════════════════ */
+.profile-hero{
+  display:flex;gap:32px;align-items:flex-start;
+  padding:24px;background:var(--surface);
+  border:1px solid var(--border);border-radius:12px;
+  margin-bottom:24px;
+}
+.profile-avatar-lg{
+  width:100px;height:100px;border-radius:50%;
+  overflow:hidden;border:3px solid var(--neon);flex-shrink:0;
+}
+.profile-avatar-lg img{width:100%;height:100%;object-fit:cover}
+.profile-info{flex:1}
+.profile-name{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:28px;text-transform:uppercase;
+  color:var(--text);margin-bottom:2px;
+}
+.profile-handle{font-size:13px;color:var(--text-muted);margin-bottom:8px}
+.profile-bio{
+  font-size:13px;color:var(--text-dim);line-height:1.5;
+  margin-bottom:14px;max-width:500px;
+}
+.profile-stats-row{
+  display:flex;gap:24px;margin-bottom:16px;
+}
+.profile-stat{display:flex;flex-direction:column;gap:1px}
+.profile-stat-val{font-size:18px;font-weight:900;color:var(--text)}
+.profile-stat-label{
+  font-size:9px;font-weight:600;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.profile-actions{display:flex;gap:10px}
+.btn-follow{
+  padding:8px 24px;border:none;border-radius:6px;
+  background:var(--neon);color:#fff;
+  font-family:var(--font);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.btn-follow:hover{box-shadow:0 4px 16px rgba(45,190,0,.25)}
+.btn-cosign{
+  padding:8px 24px;border:1px solid var(--neon);
+  border-radius:6px;background:var(--neon-dim);
+  color:var(--neon-dark);
+  font-family:var(--font);font-size:11px;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;transition:all .15s;
+}
+.btn-cosign:hover{background:var(--neon);color:#fff}
+
+.profile-vx-score{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 16px;background:var(--neon-dim);
+  border-radius:8px;margin-bottom:14px;
+  width:fit-content;
+}
+.profile-vx-label{
+  font-size:9px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--neon-dark);
+}
+.profile-vx-val{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:22px;color:var(--neon-dark);
+}
+
+/* Profile sections */
+.profile-section{margin-bottom:32px}
+.profile-section-header{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:16px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.profile-section-title{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:18px;text-transform:uppercase;color:var(--text);
+}
+.profile-section-title span{color:var(--neon)}
+
+/* portfolio table */
+.portfolio-table{
+  width:100%;border-collapse:collapse;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;overflow:hidden;
+}
+.portfolio-table thead{background:var(--surface-2)}
+.portfolio-table th{
+  text-align:left;padding:10px 14px;
+  font-size:9px;font-weight:700;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+.portfolio-table td{
+  padding:10px 14px;border-top:1px solid var(--surface-2);
+  font-size:13px;color:var(--text-dim);
+}
+.portfolio-table td.item-name{font-weight:700;color:var(--text)}
+.portfolio-table .positive{color:var(--green);font-weight:600}
+.portfolio-table .negative{color:var(--red);font-weight:600}
+
+/* accuracy metrics */
+.accuracy-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:12px;
+}
+.accuracy-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:8px;padding:16px;text-align:center;
+}
+.accuracy-val{
+  font-family:var(--font-cond);font-weight:900;
+  font-size:28px;color:var(--neon-dark);
+  margin-bottom:4px;
+}
+.accuracy-label{
+  font-size:9px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-muted);
+}
+
+/* recent moves */
+.moves-list{display:flex;flex-direction:column;gap:8px}
+.move-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;background:var(--surface);
+  border:1px solid var(--border);border-radius:8px;
+  transition:border-color .15s;
+}
+.move-item:hover{border-color:var(--neon)}
+.move-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.move-icon.scout-icon{background:var(--neon-dim);color:var(--neon-dark)}
+.move-icon.sell-icon{background:rgba(229,57,53,.08);color:var(--red)}
+.move-icon.list-icon{background:rgba(239,140,0,.08);color:var(--orange)}
+.move-info{flex:1}
+.move-title{font-size:13px;font-weight:600;color:var(--text)}
+.move-desc{font-size:11px;color:var(--text-muted);margin-top:1px}
+.move-time{
+  font-size:10px;color:var(--text-muted);flex-shrink:0;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media(max-width:1200px){
+  .sellers-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:1024px){
+  .sidebar{width:300px;min-width:300px}
+  .sellers-grid{grid-template-columns:repeat(2,1fr)}
+  .trends-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  .sidebar{display:none}
+  .sellers-grid{grid-template-columns:repeat(2,1fr)}
+  .trends-grid{grid-template-columns:1fr 1fr}
+  .accuracy-grid{grid-template-columns:repeat(2,1fr)}
+  .topnav-search{display:none}
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fade-in{animation:fadeUp .4s cubic-bezier(.16,1,.3,1) both}
+.fade-in-1{animation-delay:.05s}
+.fade-in-2{animation-delay:.1s}
+.fade-in-3{animation-delay:.15s}
+.fade-in-4{animation-delay:.2s}
+
+/* Live dot */
+.live-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--neon);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     TOP NAVIGATION
+     ═══════════════════════════════════════════ -->
+<nav class="topnav">
+  <div class="topnav-logo" onclick="showPage('home')">VANTAGE<span>X</span></div>
+  <div class="topnav-links">
+    <button class="topnav-link active" data-page="home" onclick="showPage('home')">Home</button>
+    <button class="topnav-link" data-page="explore" onclick="showPage('home')">Explore</button>
+    <button class="topnav-link" data-page="portfolio" onclick="showPage('home')">Portfolio</button>
+  </div>
+  <div class="topnav-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <span>Search trends, resellers...</span>
+    <kbd>/</kbd>
+  </div>
+  <div class="topnav-right">
+    <div class="topnav-credits">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+      2,500 XP
+    </div>
+    <div class="topnav-avatar" onclick="showPage('profile')" title="View Profile">AM</div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     APP BODY
+     ═══════════════════════════════════════════ -->
+<div class="app">
+  <div class="main">
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page-view active">
+
+      <!-- Top Sellers -->
+      <div class="section-header fade-in">
+        <div class="section-label">Top <span>Sellers</span></div>
+        <button class="section-more">View all &rarr;</button>
+      </div>
+      <div class="sellers-grid" id="sellers-grid"></div>
+
+      <!-- Early Trending -->
+      <div class="section-header fade-in">
+        <div class="section-label">Early <span>Trending</span></div>
+        <button class="section-more">View all &rarr;</button>
+      </div>
+      <div class="trends-grid" id="trends-grid"></div>
+
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="page-profile" class="page-view"></div>
+
+  </div>
+
+  <!-- SIDEBAR: TRADES PANE -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Live <span>Activity</span></div>
+      <div class="sidebar-sub" style="display:flex;align-items:center;gap:6px">
+        <span class="live-dot"></span> Real-time trades and moves
+      </div>
+    </div>
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" onclick="switchSidebarTab('trades',this)">Trades</button>
+      <button class="sidebar-tab" onclick="switchSidebarTab('leaderboard',this)">Leaderboard</button>
+      <button class="sidebar-tab" onclick="switchSidebarTab('cosigns',this)">Co-Signs</button>
+    </div>
+    <div id="sidebar-trades" class="sidebar-panel">
+      <div class="trades-list" id="trades-list"></div>
+    </div>
+    <div id="sidebar-leaderboard" class="sidebar-panel" style="display:none">
+      <div class="leaderboard-mini" id="leaderboard-list"></div>
+    </div>
+    <div id="sidebar-cosigns" class="sidebar-panel" style="display:none">
+      <div class="cosign-summary">
+        <div class="cosign-summary-title">Your Co-Sign Portfolio</div>
+        <div class="cosign-row"><span class="cosign-label">Active co-signs</span><span class="cosign-val">4</span></div>
+        <div class="cosign-row"><span class="cosign-label">Credits deployed</span><span class="cosign-val">1,200 XP</span></div>
+        <div class="cosign-row"><span class="cosign-label">Unrealized P&L</span><span class="cosign-val positive">+180 XP</span></div>
+      </div>
+      <div class="trades-list" id="cosign-list"></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const SELLERS = [
+  {name:'Aria Chen',handle:'@ariavintage',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop&crop=face',score:94,followers:'12.4K',accuracy:'88%',trend:'Sheer Layering',specialty:'Archive & Contemporary',bio:'NYC-based vintage curator. Ex-Vogue stylist. Specializing in archive pieces and emerging designer collaborations.',listings:342,sold:1289,joined:'Jan 2025',items:['Margiela Blazer','Prada Re-Nylon','Bottega Cassette']},
+  {name:'Marcus Reid',handle:'@marcusflips',avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',score:91,followers:'8.7K',accuracy:'85%',trend:'Burgundy Leather',specialty:'Sneakers & Streetwear',bio:'LA reseller since 2019. Sneaker market analyst. Building the largest streetwear portfolio on VantageX.',listings:518,sold:2104,joined:'Feb 2025',items:['Jordan 1 Chicago','Dunk Low Panda','Yeezy 350 Beluga']},
+  {name:'Yuki Tanaka',handle:'@yukifinds',avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face',score:89,followers:'6.2K',accuracy:'91%',trend:'Metallic Tailoring',specialty:'Japanese Designers',bio:'Tokyo-to-London. Sourcing Issey Miyake, CDG, and Yohji. Highest accuracy score in the tailoring category.',listings:187,sold:823,joined:'Mar 2025',items:['CDG Homme Blazer','Issey Pleats','Yohji Pour Homme']},
+  {name:'Dante Williams',handle:'@dantecurates',avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',score:87,followers:'5.1K',accuracy:'82%',trend:'Raw-Edge Knitwear',specialty:'Emerging Brands',bio:'Chicago. Early mover on indie labels. Called the Ceramic Jewelry wave 3 months before it trended.',listings:245,sold:678,joined:'Jan 2025',items:['Acne Studios Knit','Marni Sweater','ERL Hoodie']},
+  {name:'Sofia Reyes',handle:'@sofiasource',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop&crop=face',score:86,followers:'4.8K',accuracy:'79%',trend:'Silver Draped Mini',specialty:'Evening & Occasion',bio:'Miami vintage queen. Evening wear specialist. Curating the best cocktail and event pieces from 60s to now.',listings:198,sold:567,joined:'Apr 2025',items:['Versace Chain','Mugler Bodysuit','Thierry Mugler']},
+  {name:'Jake Morrison',handle:'@jakemvintage',avatar:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop&crop=face',score:84,followers:'3.9K',accuracy:'83%',trend:'Minimalist Maxi Coats',specialty:'Outerwear',bio:'Portland. Outerwear obsessive. If it is a coat, I have sourced it. Building the definitive outerwear portfolio.',listings:312,sold:945,joined:'Feb 2025',items:['The Row Coat','Toteme Scarf Coat','Lemaire Wrap']},
+  {name:'Priya Patel',handle:'@priyapicks',avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&crop=face',score:82,followers:'3.2K',accuracy:'86%',trend:'Ceramic Jewelry',specialty:'Accessories & Jewelry',bio:'London. Accessories-only reseller. Specializing in independent ceramic and artisan jewelry makers.',listings:156,sold:412,joined:'Mar 2025',items:['Ceramic Ear Cuff','Clay Pendant','Porcelain Ring']},
+  {name:'Leo Marchetti',handle:'@leothrift',avatar:'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop&crop=face',score:80,followers:'2.8K',accuracy:'77%',trend:'Sculpted Cocoon Coats',specialty:'Italian Luxury',bio:'Milan native. Sourcing directly from Italian consignment. Specializing in Prada, Bottega, and emerging Milan brands.',listings:267,sold:534,joined:'May 2025',items:['Prada Wool Coat','Bottega Clutch','Marni Blazer']},
+];
+
+const TRENDS = [
+  {name:'Sheer Layering',sub:'Translucent fabrics, layered evening. Valentino, Dior, Bottega Veneta SS26.',fi:0.0312,delta:+18,lifecycle:'GROWTH',price:38,signals:{runway:82,editorial:71,social:65,retail:44},chart:[20,25,28,32,35,42,48,55,60,62,68,72,78,85,90,88,92,95],img:'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=500&h=625&fit=crop'},
+  {name:'Raw-Edge Knitwear',sub:'Deconstructed knits with visible seams and frayed edges. Marni, Acne Studios.',fi:0.0089,delta:+42,lifecycle:'EARLY',price:12,signals:{runway:35,editorial:22,social:45,retail:8},chart:[2,3,3,4,5,5,6,8,10,12,15,18,22,28,32,38,42,48],img:'https://images.unsplash.com/photo-1434389677669-e08b4cda3a12?w=500&h=625&fit=crop'},
+  {name:'Ceramic Jewelry',sub:'Hand-formed porcelain and clay accessories from independent ateliers.',fi:0.0065,delta:+68,lifecycle:'EARLY',price:8,signals:{runway:12,editorial:18,social:35,retail:5},chart:[1,1,2,2,3,3,4,5,6,8,10,12,15,20,25,30,38,48],img:'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=625&fit=crop'},
+  {name:'Burgundy Leather',sub:'Deep oxblood leather across outerwear, bags, boots. Bottega and Saint Laurent FW26.',fi:0.0105,delta:+35,lifecycle:'EARLY',price:15,signals:{runway:45,editorial:32,social:28,retail:12},chart:[3,4,5,6,8,10,12,15,18,22,28,32,38,42,48,55,62,68],img:'https://images.unsplash.com/photo-1558171813-4c088753af8f?w=500&h=625&fit=crop'},
+  {name:'Metallic Tailoring',sub:'Shimmer-thread wool blends. Aristocratic shimmer meets workwear structure.',fi:0.0251,delta:+8,lifecycle:'GROWTH',price:36,signals:{runway:72,editorial:65,social:55,retail:48},chart:[20,25,30,35,42,48,55,60,65,70,75,78,82,85,88,90,92,93],img:'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?w=500&h=625&fit=crop'},
+  {name:'Minimalist Maxi Coats',sub:'A-line floor-length wool in solid black and camel. The Row and Toteme.',fi:0.0297,delta:+12,lifecycle:'GROWTH',price:35,signals:{runway:75,editorial:82,social:70,retail:55},chart:[15,18,22,28,35,40,48,55,62,68,72,78,82,85,88,90,92,95],img:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500&h=625&fit=crop'},
+];
+
+const TRADES = [
+  {seller:'Aria Chen',avatar:0,action:'scouted',trend:'Sheer Layering',type:'scout',time:'2m ago'},
+  {seller:'Marcus Reid',avatar:1,action:'listed',trend:'Jordan 1 Chicago',type:'list',time:'5m ago'},
+  {seller:'Yuki Tanaka',avatar:2,action:'sold',trend:'CDG Homme Blazer',type:'sell',time:'8m ago'},
+  {seller:'Dante Williams',avatar:3,action:'scouted',trend:'Raw-Edge Knitwear',type:'scout',time:'12m ago'},
+  {seller:'Sofia Reyes',avatar:4,action:'listed',trend:'Versace Chain Dress',type:'list',time:'18m ago'},
+  {seller:'Jake Morrison',avatar:5,action:'scouted',trend:'Minimalist Maxi Coats',type:'scout',time:'22m ago'},
+  {seller:'Priya Patel',avatar:6,action:'sold',trend:'Ceramic Ear Cuff Set',type:'sell',time:'28m ago'},
+  {seller:'Leo Marchetti',avatar:7,action:'listed',trend:'Prada Wool Overcoat',type:'list',time:'31m ago'},
+  {seller:'Aria Chen',avatar:0,action:'sold',trend:'Margiela Blazer',type:'sell',time:'35m ago'},
+  {seller:'Marcus Reid',avatar:1,action:'scouted',trend:'Burgundy Leather',type:'scout',time:'41m ago'},
+  {seller:'Yuki Tanaka',avatar:2,action:'listed',trend:'Issey Pleats Jacket',type:'list',time:'48m ago'},
+  {seller:'Dante Williams',avatar:3,action:'sold',trend:'Acne Studios Knit',type:'sell',time:'55m ago'},
+];
+
+const COSIGNS = [
+  {seller:'Aria Chen',avatar:0,action:'co-signed by',trend:'you',type:'cosign',time:'1h ago',detail:'Backed Sheer Layering basket — +120 XP'},
+  {seller:'Marcus Reid',avatar:1,action:'co-signed by',trend:'alex_m',type:'cosign',time:'2h ago',detail:'Backed full portfolio — 500 XP deployed'},
+  {seller:'Yuki Tanaka',avatar:2,action:'co-signed by',trend:'fashionfi',type:'cosign',time:'3h ago',detail:'Backed Metallic Tailoring basket — +80 XP'},
+  {seller:'Dante Williams',avatar:3,action:'co-signed by',trend:'trendwatch',type:'cosign',time:'5h ago',detail:'Backed Raw-Edge Knitwear basket — +45 XP'},
+];
+
+// ═══════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════
+
+function renderSellers(){
+  const grid = document.getElementById('sellers-grid');
+  grid.innerHTML = SELLERS.map((s,i) => `
+    <div class="seller-card fade-in fade-in-${i%4+1}" onclick="showProfile(${i})">
+      <div class="seller-rank">#${i+1}</div>
+      <div class="seller-avatar"><img src="${s.avatar}" alt="${s.name}"></div>
+      <div class="seller-name">${s.name}</div>
+      <div class="seller-handle">${s.handle}</div>
+      <div class="seller-stats">
+        <div class="seller-stat">
+          <div class="seller-stat-val">${s.followers}</div>
+          <div class="seller-stat-label">Followers</div>
+        </div>
+        <div class="seller-stat">
+          <div class="seller-stat-val">${s.accuracy}</div>
+          <div class="seller-stat-label">Accuracy</div>
+        </div>
+      </div>
+      <div class="seller-score">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        VX Score: ${s.score}
+      </div>
+      <button class="seller-follow" onclick="event.stopPropagation();toggleFollow(this)">Follow</button>
+    </div>
+  `).join('');
+}
+
+function makeSparkline(chart){
+  const w=60,h=24;
+  const max=Math.max(...chart),min=Math.min(...chart);
+  const pts=chart.map((v,i)=>{
+    const x=(i/(chart.length-1))*w;
+    const y=h-((v-min)/(max-min))*h;
+    return `${x},${y}`;
+  }).join(' ');
+  return `<svg class="sparkline" viewBox="0 0 ${w} ${h}"><polyline points="${pts}"/></svg>`;
+}
+
+function renderTrends(){
+  const grid = document.getElementById('trends-grid');
+  grid.innerHTML = TRENDS.map((t,i) => {
+    const lcClass = t.lifecycle.toLowerCase();
+    const deltaSign = t.delta > 0 ? '+' : '';
+    const deltaClass = t.delta >= 0 ? 'up' : 'down';
+    return `
+    <div class="trend-card fade-in fade-in-${i%4+1}">
+      <img class="trend-img" src="${t.img}" alt="${t.name}" loading="lazy">
+      <div class="trend-body">
+        <div class="trend-row">
+          <div class="trend-name">${t.name}</div>
+          <div class="trend-lifecycle lc-${lcClass}">${t.lifecycle}</div>
+        </div>
+        <div class="trend-sub">${t.sub}</div>
+        <div class="trend-meta">
+          <div class="trend-meta-item">
+            <div class="trend-meta-label">FI Score</div>
+            <div class="trend-meta-val">${t.fi.toFixed(4)}</div>
+          </div>
+          <div class="trend-meta-item">
+            <div class="trend-meta-label">30d</div>
+            <div class="trend-meta-val ${deltaClass}">${deltaSign}${t.delta}%</div>
+          </div>
+          <div class="trend-meta-item">
+            <div class="trend-meta-label">Momentum</div>
+            ${makeSparkline(t.chart)}
+          </div>
+        </div>
+      </div>
+    </div>
+    `;
+  }).join('');
+}
+
+function renderTrades(){
+  const list = document.getElementById('trades-list');
+  list.innerHTML = TRADES.map(t => `
+    <div class="trade-item">
+      <div class="trade-avatar"><img src="${SELLERS[t.avatar].avatar}" alt=""></div>
+      <div class="trade-info">
+        <div class="trade-action">
+          <span class="trade-seller">${t.seller}</span> ${t.action}
+          <span class="trade-trend">${t.trend}</span>
+        </div>
+        <div class="trade-time">${t.time}</div>
+      </div>
+      <div class="trade-badge ${t.type}">${t.type}</div>
+    </div>
+  `).join('');
+}
+
+function renderLeaderboard(){
+  const list = document.getElementById('leaderboard-list');
+  list.innerHTML = SELLERS.map((s,i) => `
+    <div class="lb-item">
+      <div class="lb-rank">${i+1}</div>
+      <div class="lb-avatar"><img src="${s.avatar}" alt=""></div>
+      <div class="lb-info">
+        <div class="lb-name">${s.name}</div>
+        <div class="lb-handle">${s.handle}</div>
+      </div>
+      <div class="lb-score">${s.score}</div>
+    </div>
+  `).join('');
+}
+
+function renderCosigns(){
+  const list = document.getElementById('cosign-list');
+  list.innerHTML = COSIGNS.map(c => `
+    <div class="trade-item">
+      <div class="trade-avatar"><img src="${SELLERS[c.avatar].avatar}" alt=""></div>
+      <div class="trade-info">
+        <div class="trade-action">
+          <span class="trade-seller">${c.seller}</span> ${c.action}
+          <span class="trade-trend">${c.trend}</span>
+        </div>
+        <div class="trade-time">${c.detail}</div>
+      </div>
+      <div class="trade-badge ${c.type}">${c.type}</div>
+    </div>
+  `).join('');
+}
+
+function showProfile(idx){
+  const s = SELLERS[idx];
+  const profilePage = document.getElementById('page-profile');
+  profilePage.innerHTML = `
+    <div class="profile-hero fade-in">
+      <div class="profile-avatar-lg"><img src="${s.avatar}" alt="${s.name}"></div>
+      <div class="profile-info">
+        <div class="profile-name">${s.name}</div>
+        <div class="profile-handle">${s.handle} &middot; ${s.specialty}</div>
+        <div class="profile-vx-score">
+          <div class="profile-vx-label">VX Score</div>
+          <div class="profile-vx-val">${s.score}</div>
+        </div>
+        <div class="profile-bio">${s.bio}</div>
+        <div class="profile-stats-row">
+          <div class="profile-stat"><div class="profile-stat-val">${s.followers}</div><div class="profile-stat-label">Followers</div></div>
+          <div class="profile-stat"><div class="profile-stat-val">${s.listings}</div><div class="profile-stat-label">Active Listings</div></div>
+          <div class="profile-stat"><div class="profile-stat-val">${s.sold.toLocaleString()}</div><div class="profile-stat-label">Items Sold</div></div>
+          <div class="profile-stat"><div class="profile-stat-val">${s.accuracy}</div><div class="profile-stat-label">Accuracy</div></div>
+          <div class="profile-stat"><div class="profile-stat-val">${s.joined}</div><div class="profile-stat-label">Joined</div></div>
+        </div>
+        <div class="profile-actions">
+          <button class="btn-follow" onclick="this.textContent=this.textContent==='FOLLOW'?'FOLLOWING':'FOLLOW'">FOLLOW</button>
+          <button class="btn-cosign">CO-SIGN</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section fade-in fade-in-1">
+      <div class="profile-section-header">
+        <div class="profile-section-title">Accuracy <span>Metrics</span></div>
+      </div>
+      <div class="accuracy-grid">
+        <div class="accuracy-card"><div class="accuracy-val">${s.accuracy}</div><div class="accuracy-label">Trend Accuracy</div></div>
+        <div class="accuracy-card"><div class="accuracy-val">${s.score}</div><div class="accuracy-label">VX Score</div></div>
+        <div class="accuracy-card"><div class="accuracy-val">${Math.round(parseInt(s.accuracy)*0.9)}%</div><div class="accuracy-label">Timing Score</div></div>
+        <div class="accuracy-card"><div class="accuracy-val">${Math.round(parseInt(s.accuracy)*0.85)}%</div><div class="accuracy-label">Price Accuracy</div></div>
+      </div>
+    </div>
+
+    <div class="profile-section fade-in fade-in-2">
+      <div class="profile-section-header">
+        <div class="profile-section-title">Current <span>Portfolio</span></div>
+        <div style="font-size:11px;color:var(--text-muted)">${s.listings} active items</div>
+      </div>
+      <table class="portfolio-table">
+        <thead>
+          <tr><th>Item</th><th>Lifecycle</th><th>Cost</th><th>Est. Value</th><th>P&L</th></tr>
+        </thead>
+        <tbody>
+          ${s.items.map((item,j) => {
+            const cost = [400,600,900,180,450,350,280][j] || 400;
+            const val = Math.round(cost * (1 + (Math.random()*0.8-0.1)));
+            const pl = val - cost;
+            const plClass = pl >= 0 ? 'positive' : 'negative';
+            const lcs = ['GROWTH','EARLY','PEAK','GROWTH','DECLINE','GROWTH','EARLY'];
+            const lcClass = lcs[j]?.toLowerCase() || 'growth';
+            return `<tr>
+              <td class="item-name">${item}</td>
+              <td><span class="trend-lifecycle lc-${lcClass}" style="font-size:9px">${lcs[j]||'GROWTH'}</span></td>
+              <td>$${cost.toLocaleString()}</td>
+              <td>$${val.toLocaleString()}</td>
+              <td class="${plClass}">${pl>=0?'+':''}$${pl.toLocaleString()}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="profile-section fade-in fade-in-3">
+      <div class="profile-section-header">
+        <div class="profile-section-title">Recent <span>Moves</span></div>
+      </div>
+      <div class="moves-list">
+        <div class="move-item">
+          <div class="move-icon scout-icon">&#9670;</div>
+          <div class="move-info">
+            <div class="move-title">Scouted ${s.trend}</div>
+            <div class="move-desc">Added to portfolio — lifecycle ${TRENDS.find(t=>t.name===s.trend)?.lifecycle||'GROWTH'}</div>
+          </div>
+          <div class="move-time">2h ago</div>
+        </div>
+        <div class="move-item">
+          <div class="move-icon sell-icon">&#9650;</div>
+          <div class="move-info">
+            <div class="move-title">Sold ${s.items[0]}</div>
+            <div class="move-desc">Realized +$${Math.round(Math.random()*300+100)} profit</div>
+          </div>
+          <div class="move-time">1d ago</div>
+        </div>
+        <div class="move-item">
+          <div class="move-icon list-icon">&#9679;</div>
+          <div class="move-info">
+            <div class="move-title">Listed ${s.items[1]||s.items[0]}</div>
+            <div class="move-desc">VantageX recommendation: HOLD — trend accelerating</div>
+          </div>
+          <div class="move-time">2d ago</div>
+        </div>
+        <div class="move-item">
+          <div class="move-icon scout-icon">&#9670;</div>
+          <div class="move-info">
+            <div class="move-title">Scouted ${s.items[2]||s.items[0]}</div>
+            <div class="move-desc">FI signal: EARLY stage, +${Math.round(Math.random()*40+20)}% momentum</div>
+          </div>
+          <div class="move-time">3d ago</div>
+        </div>
+      </div>
+    </div>
+  `;
+  showPage('profile');
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function showPage(page){
+  document.querySelectorAll('.page-view').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  document.querySelectorAll('.topnav-link').forEach(l=>l.classList.remove('active'));
+  const link = document.querySelector(`.topnav-link[data-page="${page}"]`);
+  if(link) link.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function switchSidebarTab(tab, btn){
+  document.querySelectorAll('.sidebar-panel').forEach(p=>p.style.display='none');
+  document.getElementById('sidebar-'+tab).style.display='block';
+  document.querySelectorAll('.sidebar-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleFollow(btn){
+  if(btn.classList.contains('following')){
+    btn.classList.remove('following');
+    btn.textContent='Follow';
+  } else {
+    btn.classList.add('following');
+    btn.textContent='Following';
+  }
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderSellers();
+renderTrends();
+renderTrades();
+renderLeaderboard();
+renderCosigns();
+</script>
+</body>
+</html>
